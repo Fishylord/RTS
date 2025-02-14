@@ -1,82 +1,54 @@
 mod simulation;
-mod flow_analyzer;
 mod traffic_light;
 mod system_monitoring;
 
-use std::io;
-use std::sync::mpsc;
+use std::sync::{Arc, Mutex};
+use std::collections::HashMap;
 use std::thread;
+use std::sync::mpsc;
+
+use simulation::run_simulation;
+use traffic_light::run_traffic_lights;
+use system_monitoring::LogEvent;
 
 fn main() {
-    println!("=== Traffic Simulation Monitoring CLI ===");
-    println!("Commands: 'start' to begin simulation, 'exit' to quit.");
+    println!("=== Real-Time Traffic Simulation ===");
 
-    let mut input = String::new();
-    loop {
-        input.clear();
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read input");
-        let command = input.trim();
-        if command.eq_ignore_ascii_case("start") {
-            // This function spawns all threads for the simulation
-            start_simulation();
-            println!("Simulation completed.\nType 'start' to run again, or 'exit' to quit.");
-        } else if command.eq_ignore_ascii_case("exit") {
-            println!("Exiting.");
-            break;
-        } else {
-            println!("Unknown command. Available commands: start, exit");
+    // Create a shared traffic light state for intersections 1–4.
+    let traffic_lights = Arc::new(Mutex::new({
+        let mut map = HashMap::new();
+        // Initialize each intersection with NSGreen.
+        for id in 1..=4 {
+            map.insert(id, traffic_light::LightState::NSGreen);
         }
-    }
-}
+        map
+    }));
 
-/// Spawns the simulation, flow analyzer, traffic lights, and monitoring threads,
-/// and then waits for all threads to complete.
-fn start_simulation() {
-    // Create channels for inter-component communication.
-    // sim_tx/sim_rx: simulation events from SimulationEngine to FlowAnalyzer.
-    let (sim_tx, sim_rx) = mpsc::channel::<simulation::SimEvent>();
-    // fa_tx/fa_rx: recommendations from FlowAnalyzer to TrafficLight.
-    let (fa_tx, fa_rx) = mpsc::channel::<flow_analyzer::Recommendation>();
-    // log_tx/log_rx: log events from all components to the Monitoring system.
-    let (log_tx, log_rx) = mpsc::channel::<system_monitoring::LogEvent>();
+    // Create a channel for logging events.
+    let (log_tx, log_rx) = mpsc::channel::<LogEvent>();
 
-    // Spawn Simulation Engine thread.
-    let sim_thread = thread::spawn({
-        let sim_tx = sim_tx.clone();
-        let log_tx = log_tx.clone();
-        move || {
-            simulation::run_simulation(sim_tx, log_tx);
-        }
+    // Spawn the Traffic Light Controller thread.
+    let tl_lights = Arc::clone(&traffic_lights);
+    let tl_log_tx = log_tx.clone();
+    let _traffic_light_handle = thread::spawn(move || {
+        run_traffic_lights(tl_lights, tl_log_tx);
     });
 
-    // Spawn Traffic Flow Analyzer thread.
-    let fa_thread = thread::spawn({
-        let log_tx = log_tx.clone();
-        move || {
-            flow_analyzer::run_flow_analyzer(sim_rx, fa_tx, log_tx);
-        }
+    // Spawn the Simulation Engine thread (which spawns 30 car threads).
+    let simulation_handle = thread::spawn(move || {
+        run_simulation(traffic_lights, log_tx);
     });
 
-    // Spawn Traffic Light Control thread.
-    let tl_thread = thread::spawn({
-        let log_tx = log_tx.clone();
-        move || {
-            traffic_light::run_traffic_lights(fa_rx, log_tx);
-        }
-    });
-
-    // Spawn System Monitoring and Reporting thread.
-    let sm_thread = thread::spawn(move || {
+    // Spawn the System Monitoring thread to print logs.
+    let monitoring_handle = thread::spawn(move || {
         system_monitoring::run_monitoring(log_rx);
     });
 
-    // Wait for threads to finish.
-    sim_thread.join().unwrap();
-    // When the simulation finishes, the channels will eventually be closed.
-    // (A more complete system would include explicit shutdown signals.)
-    fa_thread.join().unwrap();
-    tl_thread.join().unwrap();
-    sm_thread.join().unwrap();
+    // Wait for the simulation to complete.
+    simulation_handle.join().unwrap();
+
+    // (In a complete system we would signal the traffic light thread to shut down.)
+    // Sleep briefly so all log messages get printed.
+    thread::sleep(std::time::Duration::from_secs(1));
+    println!("Simulation complete. Exiting.");
 }
