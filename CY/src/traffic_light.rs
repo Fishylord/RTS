@@ -1,41 +1,45 @@
-use std::sync::{Arc, Mutex, mpsc::Sender};
 use std::collections::HashMap;
+use std::sync::{Arc, Mutex, mpsc::Sender};
 use std::thread;
 use std::time::Duration;
 
 use crate::system_monitoring::LogEvent;
 
-/// The state of a traffic light.
+/// Represents the state of a traffic light.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum LightState {
     NSGreen,
     EWGreen,
 }
 
-/// Runs the traffic light controller. Every 5 seconds the light state for each
-/// intersection is toggled (NSGreen ↔ EWGreen) and a log event is sent.
+/// Returns true if the current light state allows movement in the specified direction.
+pub fn can_proceed(state: LightState, direction: crate::simulation::Direction) -> bool {
+    match state {
+        LightState::NSGreen => direction == crate::simulation::Direction::North || direction == crate::simulation::Direction::South,
+        LightState::EWGreen => direction == crate::simulation::Direction::East || direction == crate::simulation::Direction::West,
+    }
+}
+
+/// Runs the traffic light controller.
+/// Every 5 seconds the light at each intersection toggles between NSGreen and EWGreen.
 pub fn run_traffic_lights(
     traffic_lights: Arc<Mutex<HashMap<u32, LightState>>>,
     log_tx: Sender<LogEvent>,
 ) {
     loop {
         thread::sleep(Duration::from_secs(5));
-        {
-            let mut lights = traffic_lights.lock().unwrap();
-            for (intersection, state) in lights.iter_mut() {
-                // Toggle the light state.
-                *state = match *state {
-                    LightState::NSGreen => LightState::EWGreen,
-                    LightState::EWGreen => LightState::NSGreen,
-                };
-                // Log the change.
-                let log_event = LogEvent {
-                    source: format!("Intersection-{}", intersection),
-                    message: format!("Traffic light switched to {:?}", *state),
-                    timestamp: current_time_secs(),
-                };
-                log_tx.send(log_event).unwrap();
-            }
+        let mut lights = traffic_lights.lock().unwrap();
+        for (junction, state) in lights.iter_mut() {
+            *state = match *state {
+                LightState::NSGreen => LightState::EWGreen,
+                LightState::EWGreen => LightState::NSGreen,
+            };
+            let log_event = LogEvent {
+                source: format!("Intersection-{}", junction),
+                message: format!("Traffic light switched to {:?}", *state),
+                timestamp: current_time_secs(),
+            };
+            log_tx.send(log_event).unwrap();
         }
     }
 }

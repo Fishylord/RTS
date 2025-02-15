@@ -12,19 +12,19 @@ use traffic_light::run_traffic_lights;
 use system_monitoring::LogEvent;
 
 fn main() {
-    println!("=== Real-Time Traffic Simulation ===");
+    println!("=== Real-Time 16-Junction Traffic Simulation ===");
 
-    // Create a shared traffic light state for intersections 1–4.
+    // Create a shared traffic light state for all 16 intersections.
     let traffic_lights = Arc::new(Mutex::new({
         let mut map = HashMap::new();
-        // Initialize each intersection with NSGreen.
-        for id in 1..=4 {
+        for id in 1..=16 {
+            // Initialize each intersection with NSGreen.
             map.insert(id, traffic_light::LightState::NSGreen);
         }
         map
     }));
 
-    // Create a channel for logging events.
+    // Channel for log events.
     let (log_tx, log_rx) = mpsc::channel::<LogEvent>();
 
     // Spawn the Traffic Light Controller thread.
@@ -39,16 +39,13 @@ fn main() {
         run_simulation(traffic_lights, log_tx);
     });
 
-    // Spawn the System Monitoring thread to print logs.
+    // Spawn the System Monitoring thread.
     let monitoring_handle = thread::spawn(move || {
         system_monitoring::run_monitoring(log_rx);
     });
 
-    // Wait for the simulation to complete.
     simulation_handle.join().unwrap();
-
-    // (In a complete system we would signal the traffic light thread to shut down.)
-    // Sleep briefly so all log messages get printed.
+    // Give some time for pending log messages.
     thread::sleep(std::time::Duration::from_secs(1));
     println!("Simulation complete. Exiting.");
 }
