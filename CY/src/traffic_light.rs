@@ -12,16 +12,30 @@ pub enum LightState {
     EWGreen,
 }
 
-/// Returns true if the current light state allows movement in the specified direction.
-pub fn can_proceed(state: LightState, direction: crate::simulation::Direction) -> bool {
-    match state {
-        LightState::NSGreen => direction == crate::simulation::Direction::North || direction == crate::simulation::Direction::South,
-        LightState::EWGreen => direction == crate::simulation::Direction::East || direction == crate::simulation::Direction::West,
+/// Returns true if the current light state allows movement from the current intersection to the next intersection.
+/// Horizontal movement (same row) requires EWGreen, vertical movement (same column) requires NSGreen.
+pub fn can_proceed(current_inter: u32, next_inter: u32, state: LightState) -> bool {
+    let (r1, c1) = intersection_to_coords(current_inter);
+    let (r2, c2) = intersection_to_coords(next_inter);
+    if r1 == r2 {
+        state == LightState::EWGreen
+    } else if c1 == c2 {
+        state == LightState::NSGreen
+    } else {
+        // For non-aligned intersections, disallow movement.
+        false
     }
 }
 
+/// Helper function: converts an intersection ID (1..16) to (row, col) coordinates in a 4×4 grid.
+fn intersection_to_coords(inter: u32) -> (u32, u32) {
+    let row = (inter - 1) / 4;
+    let col = (inter - 1) % 4;
+    (row, col)
+}
+
 /// Runs the traffic light controller.
-/// Every 5 seconds the light at each intersection toggles between NSGreen and EWGreen.
+/// Every 5 seconds, each intersection's light toggles between NSGreen and EWGreen.
 pub fn run_traffic_lights(
     traffic_lights: Arc<Mutex<HashMap<u32, LightState>>>,
     log_tx: Sender<LogEvent>,

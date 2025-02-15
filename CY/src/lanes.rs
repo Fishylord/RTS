@@ -3,10 +3,14 @@
 // This file provides a LaneCategory enum, a Lane struct, and a function
 // load_lanes() that returns a Vec of 52 lanes (18 boundary + 34 internal).
 // Each lane is tagged as InputBoundary, OutputBoundary, or Internal.
+//
+// The Direction field has been removed. Instead, each lane now has two fields:
+//   - start_intersection: for boundary lanes, this is the junction on the grid (for output lanes)
+//     or 0 (for input lanes coming from outside).
+//   - end_intersection: for boundary lanes, this is the junction on the grid (for input lanes)
+//     or 0 (for output lanes exiting the grid).
+// For internal lanes, both start and end intersections are specified based on the previous direction.
 
-use crate::simulation::Direction;
-
-/// Distinguishes whether a lane is an input boundary (entry), output boundary (exit), or internal.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LaneCategory {
     InputBoundary,
@@ -14,12 +18,11 @@ pub enum LaneCategory {
     Internal,
 }
 
-/// A lane in the system.
 #[derive(Debug, Clone)]
 pub struct Lane {
     pub id: u32,
-    pub intersection: u32,
-    pub direction: Direction,
+    pub start_intersection: u32,
+    pub end_intersection: u32,
     pub length: f64,
     pub category: LaneCategory,
 }
@@ -28,481 +31,449 @@ pub fn load_lanes() -> Vec<Lane> {
     let mut lanes = Vec::new();
     let mut lane_id = 1000;
 
-    //
-    // ----------------------------------------------------------------
     // 1) OUTPUT BOUNDARY LANES (10 total)
-    // ----------------------------------------------------------------
-    // Example arrangement based on prior table interpretation:
-    //  (Feel free to adjust if your exact scenario differs.)
-    //
+    // For OutputBoundary lanes, start_intersection is the grid intersection and end_intersection is 0.
     lanes.push(Lane {
         id: lane_id,
-        intersection: 1,
-        direction: Direction::North,
+        start_intersection: 1,
+        end_intersection: 0,
         length: 100.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1000
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 2,
-        direction: Direction::North,
+        start_intersection: 2,
+        end_intersection: 0,
         length: 300.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1001
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 3,
-        direction: Direction::North,
+        start_intersection: 3,
+        end_intersection: 0,
         length: 300.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1002
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 4,
-        direction: Direction::East,
+        start_intersection: 4,
+        end_intersection: 0,
         length: 200.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1003
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 5,
-        direction: Direction::West,
+        start_intersection: 5,
+        end_intersection: 0,
         length: 400.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1004
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 12,
-        direction: Direction::East,
+        start_intersection: 12,
+        end_intersection: 0,
         length: 400.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1005
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 13,
-        direction: Direction::West,
+        start_intersection: 13,
+        end_intersection: 0,
         length: 200.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1006
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 13,
-        direction: Direction::South,
+        start_intersection: 13,
+        end_intersection: 0,
         length: 200.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1007
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 15,
-        direction: Direction::South,
+        start_intersection: 15,
+        end_intersection: 0,
         length: 200.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1008
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 16,
-        direction: Direction::South,
+        start_intersection: 16,
+        end_intersection: 0,
         length: 400.0,
         category: LaneCategory::OutputBoundary,
     });
-    lane_id += 1; // #1009
+    lane_id += 1;
 
-    //
-    // ----------------------------------------------------------------
     // 2) INPUT BOUNDARY LANES (8 total)
-    // ----------------------------------------------------------------
-    //
+    // For InputBoundary lanes, start_intersection is 0 and end_intersection is the grid intersection.
     lanes.push(Lane {
         id: lane_id,
-        intersection: 1,
-        direction: Direction::East,
+        start_intersection: 0,
+        end_intersection: 1,
         length: 200.0,
         category: LaneCategory::InputBoundary,
     });
-    lane_id += 1; // #1010
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 2,
-        direction: Direction::South,
+        start_intersection: 0,
+        end_intersection: 2,
         length: 300.0,
         category: LaneCategory::InputBoundary,
     });
-    lane_id += 1; // #1011
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 4,
-        direction: Direction::South,
+        start_intersection: 0,
+        end_intersection: 4,
         length: 100.0,
         category: LaneCategory::InputBoundary,
     });
-    lane_id += 1; // #1012
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 5,
-        direction: Direction::East,
+        start_intersection: 0,
+        end_intersection: 5,
         length: 400.0,
         category: LaneCategory::InputBoundary,
     });
-    lane_id += 1; // #1013
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 12,
-        direction: Direction::West,
+        start_intersection: 0,
+        end_intersection: 12,
         length: 400.0,
         category: LaneCategory::InputBoundary,
     });
-    lane_id += 1; // #1014
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 15,
-        direction: Direction::North,
+        start_intersection: 0,
+        end_intersection: 15,
         length: 200.0,
         category: LaneCategory::InputBoundary,
     });
-    lane_id += 1; // #1015
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 16,
-        direction: Direction::West,
+        start_intersection: 0,
+        end_intersection: 16,
         length: 500.0,
         category: LaneCategory::InputBoundary,
     });
-    lane_id += 1; // #1016
-
+    lane_id += 1;
     lanes.push(Lane {
         id: lane_id,
-        intersection: 16,
-        direction: Direction::North,
+        start_intersection: 0,
+        end_intersection: 16,
         length: 400.0,
         category: LaneCategory::InputBoundary,
     });
-    lane_id += 1; // #1017
+    lane_id += 1;
 
-    //
-    // ----------------------------------------------------------------
     // 3) INTERNAL LANES (34 total)
-    // ----------------------------------------------------------------
-    //
-    // Below is an example grouping; adapt as you see fit.
-    // Row 2 (Intersections 5..8), 6 lanes horizontally
-    lanes.push(Lane {
+    // The destination is now hard-coded based on the original direction.
+    // Row 2 (Intersections 5..8) horizontally:
+    lanes.push(Lane { // from 5 east to 6
         id: lane_id,
-        intersection: 5,
-        direction: Direction::East,
-        length: 400.0,
+        start_intersection: 1,
+        end_intersection: 2,
+        length: 300.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1018
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 6 west to 5
         id: lane_id,
-        intersection: 6,
-        direction: Direction::West,
-        length: 400.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1019
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 6,
-        direction: Direction::East,
+        start_intersection: 2,
+        end_intersection: 3,
         length: 500.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1020
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 6 east to 7
         id: lane_id,
-        intersection: 7,
-        direction: Direction::West,
+        start_intersection: 3,
+        end_intersection: 4,
+        length: 200.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 7 west to 6
+        id: lane_id,
+        start_intersection: 4,
+        end_intersection: 8,
+        length: 300.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 7 east to 8
+        id: lane_id,
+        start_intersection: 5,
+        end_intersection: 1,
+        length: 300.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 8 west to 7
+        id: lane_id,
+        start_intersection: 5,
+        end_intersection: 6,
         length: 500.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1021
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 7,
-        direction: Direction::East,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1022
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 8,
-        direction: Direction::West,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1023
+    lane_id += 1;
 
-    // Column 1 between 5 and 9 => 2 lanes
-    lanes.push(Lane {
+    // Column 1 between 5 and 9:
+    lanes.push(Lane { // from 5 south to 9
         id: lane_id,
-        intersection: 5,
-        direction: Direction::South,
+        start_intersection: 5,
+        end_intersection: 9,
         length: 400.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1024
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 9 north to 5
         id: lane_id,
-        intersection: 9,
-        direction: Direction::North,
-        length: 400.0,
+        start_intersection: 6,
+        end_intersection: 5,
+        length: 500.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1025
+    lane_id += 1;
 
-    // Row 3 (Intersections 9..12), 6 lanes horizontally
-    lanes.push(Lane {
+    // Row 3 (Intersections 9..12) horizontally:
+    lanes.push(Lane { // from 9 east to 10
         id: lane_id,
-        intersection: 9,
-        direction: Direction::East,
+        start_intersection: 2,
+        end_intersection: 6,
+        length: 200.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 10 west to 9
+        id: lane_id,
+        start_intersection: 6,
+        end_intersection: 2,
+        length: 200.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 10 east to 11
+        id: lane_id,
+        start_intersection: 6,
+        end_intersection: 7,
+        length: 300.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 11 west to 10
+        id: lane_id,
+        start_intersection: 7,
+        end_intersection: 6,
+        length: 300.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 11 east to 12
+        id: lane_id,
+        start_intersection: 7,
+        end_intersection: 3,
+        length: 300.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 12 west to 11
+        id: lane_id,
+        start_intersection: 7,
+        end_intersection: 8,
+        length: 300.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+
+    // Column 2 between 6 & 10, and 10 & 14:
+    lanes.push(Lane { // from 6 south to 10
+        id: lane_id,
+        start_intersection: 8,
+        end_intersection: 7,
+        length: 300.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 10 north to 6
+        id: lane_id,
+        start_intersection: 8,
+        end_intersection: 12,
+        length: 200.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 10 south to 14
+        id: lane_id,
+        start_intersection: 9,
+        end_intersection: 10,
         length: 100.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1026
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 14 north to 10
         id: lane_id,
-        intersection: 10,
-        direction: Direction::West,
+        start_intersection: 9,
+        end_intersection: 13,
+        length: 400.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+
+    // Column 3 between 7 & 11:
+    lanes.push(Lane { // from 7 south to 11
+        id: lane_id,
+        start_intersection: 10,
+        end_intersection: 9,
         length: 100.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1027
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 11 north to 7
         id: lane_id,
-        intersection: 10,
-        direction: Direction::East,
+        start_intersection: 10,
+        end_intersection: 11,
         length: 150.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1028
-    lanes.push(Lane {
+    lane_id += 1;
+
+    // Column 4 between 8 & 12:
+    lanes.push(Lane { // from 8 south to 12
         id: lane_id,
-        intersection: 11,
-        direction: Direction::West,
+        start_intersection: 10,
+        end_intersection: 14,
+        length: 200.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 12 north to 8
+        id: lane_id,
+        start_intersection: 11,
+        end_intersection: 10,
         length: 150.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1029
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 11,
-        direction: Direction::East,
-        length: 400.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1030
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 12,
-        direction: Direction::West,
-        length: 400.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1031
+    lane_id += 1;
 
-    // Column 2 between 6 & 10, and 10 & 14 => 4 lanes
-    lanes.push(Lane {
+    // Column 1 between 9 & 13:
+    lanes.push(Lane { // from 9 south to 13
         id: lane_id,
-        intersection: 6,
-        direction: Direction::South,
+        start_intersection: 11,
+        end_intersection: 7,
+        length: 500.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 13 north to 9
+        id: lane_id,
+        start_intersection: 11,
+        end_intersection: 15,
+        length: 400.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+
+    // Column 3 between 11 & 15:
+    lanes.push(Lane { // from 11 south to 15
+        id: lane_id,
+        start_intersection: 12,
+        end_intersection: 8,
         length: 200.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1032
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 15 north to 11
         id: lane_id,
-        intersection: 10,
-        direction: Direction::North,
+        start_intersection: 12,
+        end_intersection: 16,
         length: 200.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1033
-    lanes.push(Lane {
+    lane_id += 1;
+
+    // Column 4 between 12 & 16:
+    lanes.push(Lane { // from 12 south to 16
         id: lane_id,
-        intersection: 10,
-        direction: Direction::South,
+        start_intersection: 14,
+        end_intersection: 13,
         length: 200.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1034
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 16 north to 12
         id: lane_id,
-        intersection: 14,
-        direction: Direction::North,
+        start_intersection: 14,
+        end_intersection: 10,
         length: 200.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1035
+    lane_id += 1;
 
-    // Column 3 between 7 & 11 => 2 lanes
-    lanes.push(Lane {
+    // Extra horizontal lanes in row 2/3:
+    lanes.push(Lane { // from 6 east to 7
         id: lane_id,
-        intersection: 7,
-        direction: Direction::South,
+        start_intersection: 14,
+        end_intersection: 15,
         length: 200.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1036
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 7 west to 6
         id: lane_id,
-        intersection: 11,
-        direction: Direction::North,
+        start_intersection: 15,
+        end_intersection: 14,
         length: 200.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1037
-
-    // Column 4 between 8 & 12 => 2 lanes
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 10 east to 11
         id: lane_id,
-        intersection: 8,
-        direction: Direction::South,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1038
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 12,
-        direction: Direction::North,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1039
-
-    // Column 1 between 9 & 13 => 2 lanes
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 9,
-        direction: Direction::South,
+        start_intersection: 15,
+        end_intersection: 11,
         length: 400.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1040
-    lanes.push(Lane {
+    lane_id += 1;
+    lanes.push(Lane { // from 11 west to 10
         id: lane_id,
-        intersection: 13,
-        direction: Direction::North,
-        length: 400.0,
+        start_intersection: 15,
+        end_intersection: 16,
+        length: 500.0,
         category: LaneCategory::Internal,
     });
-    lane_id += 1; // #1041
+    lane_id += 1;
+    lanes.push(Lane { // from 14 east to 15
+        id: lane_id,
+        start_intersection: 16,
+        end_intersection: 12,
+        length: 200.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
+    lanes.push(Lane { // from 15 west to 14
+        id: lane_id,
+        start_intersection: 16,
+        end_intersection: 15,
+        length: 500.0,
+        category: LaneCategory::Internal,
+    });
+    lane_id += 1;
 
-    // Column 3 between 11 & 15 => 2 lanes
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 11,
-        direction: Direction::South,
-        length: 400.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1042
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 15,
-        direction: Direction::North,
-        length: 400.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1043
-
-    // Column 4 between 12 & 16 => 2 lanes
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 12,
-        direction: Direction::South,
-        length: 400.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1044
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 16,
-        direction: Direction::North,
-        length: 400.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1045
-
-    // A few extra horizontal lanes in row 2/3 (6 more => total 34 internal)
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 6,
-        direction: Direction::East,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1046
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 7,
-        direction: Direction::West,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1047
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 10,
-        direction: Direction::East,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1048
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 11,
-        direction: Direction::West,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1049
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 14,
-        direction: Direction::East,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1050
-    lanes.push(Lane {
-        id: lane_id,
-        intersection: 15,
-        direction: Direction::West,
-        length: 300.0,
-        category: LaneCategory::Internal,
-    });
-    lane_id += 1; // #1051
-
-    // Now we have:
-    //   10 output + 8 input = 18 boundary lanes
-    //   + 34 internal lanes
-    //   = 52 total lanes.
     lanes
 }
