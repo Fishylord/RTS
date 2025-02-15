@@ -1,11 +1,15 @@
-use std::sync::{Arc, Mutex, mpsc::Sender};
+use std::sync::{Arc, mpsc::Sender};
 use std::thread;
 use std::time::{Duration, Instant};
 use rand::Rng;
 use std::collections::{HashMap, BinaryHeap};
 use std::cmp::Ordering;
 
+<<<<<<< Updated upstream
 use crate::traffic_light::LightState;
+=======
+use crate::traffic_light::{TrafficLightMap, can_proceed_lane};
+>>>>>>> Stashed changes
 use crate::system_monitoring::LogEvent;
 
 /// Represents the four cardinal directions.
@@ -173,6 +177,7 @@ fn find_path_dijkstra(start: u32, end: u32) -> Vec<u32> {
     path
 }
 
+<<<<<<< Updated upstream
 /// Simulates the journey of a single car through the network.
 /// The car:
 /// • Travels along its entry lane (length specified in the lane),
@@ -180,17 +185,109 @@ fn find_path_dijkstra(start: u32, end: u32) -> Vec<u32> {
 /// • And finally travels along its exit lane.
 /// At each intersection, it checks the local traffic light state (which toggles every 5 seconds)
 /// and waits if its travel direction isn’t permitted.
+=======
+/// New function: find_lane_path computes a route based on internal lanes.
+fn find_lane_path(start: u32, end: u32, lanes: &Vec<Lane>) -> Option<Vec<Lane>> {
+    #[derive(Debug)]
+    struct LaneState {
+        cost: f64,
+        position: u32,
+    }
+    impl Eq for LaneState {}
+    impl PartialEq for LaneState {
+        fn eq(&self, other: &Self) -> bool {
+            self.cost == other.cost
+        }
+    }
+    impl Ord for LaneState {
+        fn cmp(&self, other: &Self) -> Ordering {
+            other.cost.partial_cmp(&self.cost).unwrap_or(Ordering::Equal)
+        }
+    }
+    impl PartialOrd for LaneState {
+        fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+            Some(self.cmp(other))
+        }
+    }
+
+    let mut dist: HashMap<u32, f64> = HashMap::new();
+    let mut prev: HashMap<u32, (u32, Lane)> = HashMap::new();
+    let mut heap = BinaryHeap::new();
+    
+    for inter in 1..=16 {
+        dist.insert(inter, std::f64::INFINITY);
+    }
+    dist.insert(start, 0.0);
+    heap.push(LaneState { cost: 0.0, position: start });
+    
+    let mut lane_map: HashMap<u32, Vec<&Lane>> = HashMap::new();
+    for lane in lanes {
+        lane_map.entry(lane.start_intersection).or_default().push(lane);
+    }
+    
+    while let Some(LaneState { cost, position }) = heap.pop() {
+        if position == end {
+            break;
+        }
+        if cost > dist[&position] {
+            continue;
+        }
+        if let Some(neighbor_lanes) = lane_map.get(&position) {
+            for &lane in neighbor_lanes {
+                let next = lane.end_intersection;
+                let next_cost = cost + lane.length;
+                if next_cost < *dist.get(&next).unwrap_or(&std::f64::INFINITY) {
+                    dist.insert(next, next_cost);
+                    prev.insert(next, (position, lane.clone()));
+                    heap.push(LaneState { cost: next_cost, position: next });
+                }
+            }
+        }
+    }
+    
+    if !dist.contains_key(&end) || dist[&end] == std::f64::INFINITY {
+        return None;
+    }
+    
+    let mut path: Vec<Lane> = Vec::new();
+    let mut current = end;
+    while current != start {
+        if let Some(&(prev_inter, ref lane)) = prev.get(&current) {
+            path.push(lane.clone());
+            current = prev_inter;
+        } else {
+            break;
+        }
+    }
+    path.reverse();
+    Some(path)
+}
+
+/// Helper: returns the current system time in seconds (Unix epoch).
+fn current_time_secs() -> u64 {
+    use std::time::{SystemTime, UNIX_EPOCH};
+    SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
+}
+
+/// Simulate a single car traveling from an input boundary lane to an output boundary lane.
+>>>>>>> Stashed changes
 pub fn simulate_car(
     car_id: u32,
-    traffic_lights: Arc<Mutex<HashMap<u32, LightState>>>,
+    traffic_lights: TrafficLightMap,
     log_tx: Sender<LogEvent>,
     entry_lanes: &[Lane],
     exit_lanes: &[Lane],
 ) -> CarMetrics {
     let mut rng = rand::thread_rng();
+<<<<<<< Updated upstream
 
     // Randomly select a vehicle speed between 10 and 30 m/s.
     let speed: f64 = rng.gen_range(10.0..=30.0);
+=======
+    let speed: f64 = rng.gen_range(80.0..=100.0);
+    // If your version of rand complains, you might try:
+    // let speed: f64 = rng.random_range(10.0..=30.0);
+>>>>>>> Stashed changes
 
     // Randomly choose an entry lane.
     let input_lane = entry_lanes[rng.gen_range(0..entry_lanes.len())].clone();
@@ -204,6 +301,21 @@ pub fn simulate_car(
     let end_intersection = exit_lane.intersection;
     let route = find_path_dijkstra(start_intersection, end_intersection);
 
+<<<<<<< Updated upstream
+=======
+    let all_lanes = load_lanes();
+    let internal_lanes: Vec<Lane> = all_lanes
+        .into_iter()
+        .filter(|l| l.category == LaneCategory::Internal)
+        .collect();
+
+    let lane_route = match find_lane_path(start_intersection, end_intersection, &internal_lanes) {
+        Some(route) => route,
+        None => Vec::new(),
+    };
+
+    let lane_ids: Vec<u32> = lane_route.iter().map(|lane| lane.id).collect();
+>>>>>>> Stashed changes
     let gen_log = LogEvent {
         source: format!("Car-{}", car_id),
         message: format!(
@@ -239,12 +351,22 @@ pub fn simulate_car(
         // At the current intersection, wait for the appropriate traffic light.
         let travel_dir = get_travel_direction(current_inter, next_inter);
         let wait_start = Instant::now();
+<<<<<<< Updated upstream
         loop {
             let light_state = {
                 let lights = traffic_lights.lock().unwrap();
                 *lights.get(&current_inter).unwrap_or(&LightState::NSGreen)
             };
             if crate::traffic_light::can_proceed(light_state, travel_dir) {
+=======
+        // Wait until the individual lane's light turns green.
+        loop {
+            let can_go = {
+                let locked = traffic_lights.lock().unwrap();
+                can_proceed_lane(lane.id, &*locked)
+            };
+            if can_go {
+>>>>>>> Stashed changes
                 break;
             }
             thread::sleep(Duration::from_millis(100));
@@ -252,10 +374,16 @@ pub fn simulate_car(
         let wait_dur = wait_start.elapsed().as_secs_f64();
         total_wait_time += wait_dur;
 
+<<<<<<< Updated upstream
         // Travel along the road segment.
         let segment_time = road_length / speed;
         thread::sleep(Duration::from_secs_f64(segment_time));
         total_drive_time += segment_time;
+=======
+        let seg_time = lane.length / speed;
+        thread::sleep(Duration::from_secs_f64(seg_time));
+        total_drive_time += seg_time;
+>>>>>>> Stashed changes
     }
 
     // 3. Travel along the exit lane.
@@ -292,12 +420,18 @@ fn current_time_secs() -> u64 {
 /// Each car picks a random entry and exit lane from pre-defined pools.
 /// When all cars finish, the average wait, drive, and total times are logged.
 pub fn run_simulation(
+<<<<<<< Updated upstream
     traffic_lights: Arc<Mutex<HashMap<u32, LightState>>>,
     log_tx: std::sync::mpsc::Sender<LogEvent>,
+=======
+    traffic_lights: TrafficLightMap,
+    log_tx: Sender<LogEvent>,
+>>>>>>> Stashed changes
 ) {
     use std::sync::mpsc;
     let (result_tx, result_rx) = mpsc::channel();
 
+<<<<<<< Updated upstream
     // Define entry lanes.
     // For demonstration we assume:
     // - North boundary: intersections 1–4, lanes travel South.
@@ -312,6 +446,10 @@ pub fn run_simulation(
         entry_lanes.push(Lane { id: lane_id, intersection: inter, direction: Direction::East, length: 100.0 });
         lane_id += 1;
     }
+=======
+    // 1. Load all lanes.
+    let all_lanes = load_lanes();
+>>>>>>> Stashed changes
 
     // Define exit lanes.
     // For demonstration:
@@ -356,6 +494,10 @@ pub fn run_simulation(
         total_drive += m.drive_time;
         total_total += m.total_time;
     }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     let avg_log = LogEvent {
         source: "Simulation".to_string(),
         message: format!(
