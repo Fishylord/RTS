@@ -1,11 +1,11 @@
-use std::sync::{Arc, Mutex, mpsc::Sender};
+use std::sync::{Arc, mpsc::Sender};
 use std::thread;
 use std::time::{Duration, Instant};
 use rand::Rng;
 use std::collections::{HashMap, BinaryHeap};
 use std::cmp::Ordering;
 
-use crate::traffic_light::{LightState, can_proceed};
+use crate::traffic_light::{TrafficLightMap, can_proceed_lane};
 use crate::system_monitoring::LogEvent;
 use crate::lanes::{load_lanes, Lane, LaneCategory};
 
@@ -128,7 +128,6 @@ fn find_path_dijkstra(start: u32, end: u32) -> Vec<u32> {
 
 /// New function: find_lane_path computes a route based on internal lanes.
 fn find_lane_path(start: u32, end: u32, lanes: &Vec<Lane>) -> Option<Vec<Lane>> {
-    // A state in the lane-based Dijkstra search.
     #[derive(Debug)]
     struct LaneState {
         cost: f64,
@@ -151,25 +150,21 @@ fn find_lane_path(start: u32, end: u32, lanes: &Vec<Lane>) -> Option<Vec<Lane>> 
         }
     }
 
-    // Distance to each intersection and the lane taken to get there.
     let mut dist: HashMap<u32, f64> = HashMap::new();
     let mut prev: HashMap<u32, (u32, Lane)> = HashMap::new();
     let mut heap = BinaryHeap::new();
     
-    // Initialize distances for intersections (assuming IDs 1..=16).
     for inter in 1..=16 {
         dist.insert(inter, std::f64::INFINITY);
     }
     dist.insert(start, 0.0);
     heap.push(LaneState { cost: 0.0, position: start });
     
-    // Build a mapping: for each intersection, list lanes that start there.
     let mut lane_map: HashMap<u32, Vec<&Lane>> = HashMap::new();
     for lane in lanes {
         lane_map.entry(lane.start_intersection).or_default().push(lane);
     }
     
-    // Dijkstra’s algorithm over intersections using lane lengths as edge weights.
     while let Some(LaneState { cost, position }) = heap.pop() {
         if position == end {
             break;
@@ -190,12 +185,10 @@ fn find_lane_path(start: u32, end: u32, lanes: &Vec<Lane>) -> Option<Vec<Lane>> 
         }
     }
     
-    // If the destination is unreachable, return None.
     if !dist.contains_key(&end) || dist[&end] == std::f64::INFINITY {
         return None;
     }
     
-    // Reconstruct the path as a sequence of lanes.
     let mut path: Vec<Lane> = Vec::new();
     let mut current = end;
     while current != start {
@@ -210,7 +203,7 @@ fn find_lane_path(start: u32, end: u32, lanes: &Vec<Lane>) -> Option<Vec<Lane>> 
     Some(path)
 }
 
-/// Helper: current system time in seconds (Unix epoch).
+/// Helper: returns the current system time in seconds (Unix epoch).
 fn current_time_secs() -> u64 {
     use std::time::{SystemTime, UNIX_EPOCH};
     SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
@@ -219,13 +212,15 @@ fn current_time_secs() -> u64 {
 /// Simulate a single car traveling from an input boundary lane to an output boundary lane.
 pub fn simulate_car(
     car_id: u32,
-    traffic_lights: Arc<Mutex<HashMap<u32, LightState>>>,
+    traffic_lights: TrafficLightMap,
     log_tx: Sender<LogEvent>,
     entry_lanes: &[Lane],
     exit_lanes: &[Lane],
 ) -> CarMetrics {
     let mut rng = rand::thread_rng();
-    let speed: f64 = rng.gen_range(10.0..=30.0);
+    let speed: f64 = rng.gen_range(70.0..=90.0);
+    // If your version of rand complains, you might try:
+    // let speed: f64 = rng.random_range(10.0..=30.0);
 
     // Choose a random entry and exit lane.
     let input_lane = entry_lanes[rng.gen_range(0..entry_lanes.len())].clone();
@@ -237,20 +232,17 @@ pub fn simulate_car(
     let start_intersection = input_lane.end_intersection;
     let end_intersection = exit_lane.start_intersection;
 
-    // Load all lanes and filter for internal lanes.
     let all_lanes = load_lanes();
     let internal_lanes: Vec<Lane> = all_lanes
         .into_iter()
         .filter(|l| l.category == LaneCategory::Internal)
         .collect();
 
-    // Compute the lane-based route.
     let lane_route = match find_lane_path(start_intersection, end_intersection, &internal_lanes) {
         Some(route) => route,
-        None => Vec::new(), // Alternatively, handle route failure as needed.
+        None => Vec::new(),
     };
 
-    // Log the generated route using lane IDs.
     let lane_ids: Vec<u32> = lane_route.iter().map(|lane| lane.id).collect();
     let gen_log = LogEvent {
         source: format!("Car-{}", car_id),
@@ -274,20 +266,19 @@ pub fn simulate_car(
     // 2. Follow the lane route.
     for lane in lane_route {
         let wait_start = Instant::now();
-        // Wait for a green light at the lane’s start intersection.
+        // Wait until the individual lane's light turns green.
         loop {
-            let light_state = {
+            let can_go = {
                 let locked = traffic_lights.lock().unwrap();
-                *locked.get(&lane.start_intersection).unwrap_or(&LightState::NSGreen)
+                can_proceed_lane(lane.id, &*locked)
             };
-            if can_proceed(lane.start_intersection, lane.end_intersection, light_state) {
+            if can_go {
                 break;
             }
             thread::sleep(Duration::from_millis(100));
         }
         total_wait_time += wait_start.elapsed().as_secs_f64();
 
-        // "Drive" the lane segment.
         let seg_time = lane.length / speed;
         thread::sleep(Duration::from_secs_f64(seg_time));
         total_drive_time += seg_time;
@@ -317,12 +308,12 @@ pub fn simulate_car(
 
 /// Spawns multiple cars, each from an InputBoundary lane to an OutputBoundary lane.
 pub fn run_simulation(
-    traffic_lights: Arc<Mutex<HashMap<u32, LightState>>>,
+    traffic_lights: TrafficLightMap,
     log_tx: Sender<LogEvent>,
 ) {
     let (result_tx, result_rx) = std::sync::mpsc::channel();
 
-    // 1. Load all lanes (52 total)
+    // 1. Load all lanes.
     let all_lanes = load_lanes();
 
     // 2. Filter boundary lanes.
@@ -351,7 +342,6 @@ pub fn run_simulation(
         handles.push(handle);
     }
 
-    // Wait for all cars to finish.
     for handle in handles {
         handle.join().unwrap();
     }
@@ -367,7 +357,6 @@ pub fn run_simulation(
         total_total += m.total_time;
     }
 
-    // 5. Log the final averages.
     let avg_log = LogEvent {
         source: "Simulation".to_string(),
         message: format!("Average Times - Wait: {:.2} s, Drive: {:.2} s, Total: {:.2} s",
