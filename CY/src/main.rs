@@ -1,6 +1,7 @@
 mod simulation;
 mod traffic_light;
 mod system_monitoring;
+mod lanes;
 
 use std::sync::{Arc, Mutex};
 use std::collections::HashMap;
