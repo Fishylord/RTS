@@ -57,75 +57,6 @@ fn intersection_to_coords(inter: u32) -> (u32, u32) {
     (row, col)
 }
 
-/// Creates a simple 4×4 grid graph:
-///   - Horizontal edges = 80 m
-///   - Vertical edges = 100 m
-fn create_intersection_graph() -> HashMap<u32, Vec<(u32, f64)>> {
-    let mut graph: HashMap<u32, Vec<(u32, f64)>> = HashMap::new();
-    for inter in 1..=16 {
-        let (row, col) = intersection_to_coords(inter);
-        let mut neighbors = Vec::new();
-        if row > 0 {
-            neighbors.push((inter - 4, 100.0));
-        }
-        if row < 3 {
-            neighbors.push((inter + 4, 100.0));
-        }
-        if col > 0 {
-            neighbors.push((inter - 1, 80.0));
-        }
-        if col < 3 {
-            neighbors.push((inter + 1, 80.0));
-        }
-        graph.insert(inter, neighbors);
-    }
-    graph
-}
-
-/// Dijkstra’s algorithm to find the shortest path of intersections from `start` to `end`.
-fn find_path_dijkstra(start: u32, end: u32) -> Vec<u32> {
-    let graph = create_intersection_graph();
-    let mut dist: HashMap<u32, f64> = HashMap::new();
-    let mut prev: HashMap<u32, u32> = HashMap::new();
-    let mut heap = BinaryHeap::new();
-    for inter in 1..=16 {
-        dist.insert(inter, std::f64::INFINITY);
-    }
-    dist.insert(start, 0.0);
-    heap.push(State { cost: 0.0, position: start, prev: None });
-    while let Some(State { cost, position, .. }) = heap.pop() {
-        if position == end {
-            break;
-        }
-        if cost > dist[&position] {
-            continue;
-        }
-        if let Some(neighbors) = graph.get(&position) {
-            for &(next, length) in neighbors {
-                let next_cost = cost + length;
-                if next_cost < dist[&next] {
-                    dist.insert(next, next_cost);
-                    prev.insert(next, position);
-                    heap.push(State { cost: next_cost, position: next, prev: Some(position) });
-                }
-            }
-        }
-    }
-    let mut path = Vec::new();
-    let mut current = end;
-    path.push(current);
-    while current != start {
-        if let Some(&p) = prev.get(&current) {
-            current = p;
-            path.push(current);
-        } else {
-            break;
-        }
-    }
-    path.reverse();
-    path
-}
-
 /// New function: find_lane_path computes a route based on internal lanes.
 fn find_lane_path(start: u32, end: u32, lanes: &Vec<Lane>) -> Option<Vec<Lane>> {
     #[derive(Debug)]
@@ -293,7 +224,7 @@ pub fn simulate_car(
     let comp_log = LogEvent {
         source: format!("Car-{}", car_id),
         message: format!("Completed journey: Wait={:.2}s, Drive={:.2}s, Total={:.2}s",
-                         total_wait_time, total_drive_time, total_time),
+                        total_wait_time, total_drive_time, total_time),
         timestamp: current_time_secs(),
     };
     log_tx.send(comp_log).ok();
