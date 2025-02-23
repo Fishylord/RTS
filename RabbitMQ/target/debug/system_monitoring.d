@@ -1,0 +1,1 @@
+C:\Users\User\Documents\Coding\Rust\Practice1\target\debug\system_monitoring.exe: C:\Users\User\Documents\Coding\Rust\Practice1\src\mq.rs C:\Users\User\Documents\Coding\Rust\Practice1\src\system_monitoring.rs

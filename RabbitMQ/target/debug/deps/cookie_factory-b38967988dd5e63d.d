@@ -1,0 +1,11 @@
+C:\Users\User\Documents\Coding\Rust\Practice1\target\debug\deps\libcookie_factory-b38967988dd5e63d.rmeta: C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\lib.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\gen.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\internal.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\bytes.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\combinator.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\multi.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\sequence.rs
+
+C:\Users\User\Documents\Coding\Rust\Practice1\target\debug\deps\cookie_factory-b38967988dd5e63d.d: C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\lib.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\gen.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\internal.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\bytes.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\combinator.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\multi.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\sequence.rs
+
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\lib.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\gen.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\internal.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\bytes.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\combinator.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\multi.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\cookie-factory-0.3.3\src\sequence.rs:

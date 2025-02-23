@@ -1,47 +1,51 @@
+use std::env;
+use std::process::Command;
+
 mod simulation;
 mod traffic_light;
 mod system_monitoring;
 mod lanes;
-
-use std::sync::Arc;
-use std::thread;
-use std::sync::mpsc;
-
-use simulation::run_simulation;
-use traffic_light::{run_traffic_lights, initialize_traffic_lights, TrafficLightMap};
-use system_monitoring::LogEvent;
+mod flow_analyzer;
 
 fn main() {
-    println!("=== Real-Time 16-Junction Traffic Simulation ===");
-
-    // Initialize traffic lights for all lanes that require control.
-    // All lights are initialized to Red so that not all are green at startup.
-    let traffic_lights: TrafficLightMap = initialize_traffic_lights();
-
-    // Channel for log events.
-    let (log_tx, log_rx) = mpsc::channel::<LogEvent>();
-
-    // Start the Traffic Light Controller.
-    // This call spawns a thread per junction internally.
-    let tl_traffic_lights = Arc::clone(&traffic_lights);
-    let tl_log_tx = log_tx.clone();
-    thread::spawn(move || {
-        run_traffic_lights(tl_traffic_lights, tl_log_tx);
-    });
-
-    // Spawn the Simulation Engine thread (which spawns 30 car threads).
-    let sim_traffic_lights = Arc::clone(&traffic_lights);
-    let simulation_handle = thread::spawn(move || {
-        run_simulation(sim_traffic_lights, log_tx);
-    });
-
-    // Spawn the System Monitoring thread.
-    let _monitoring_handle = thread::spawn(move || {
-        system_monitoring::run_monitoring(log_rx);
-    });
-
-    simulation_handle.join().unwrap();
-    // Give some time for pending log messages.
-    thread::sleep(std::time::Duration::from_secs(1));
-    println!("Simulation complete. Exiting.");
+    let args: Vec<String> = env::args().collect();
+    if args.len() > 1 {
+        match args[1].as_str() {
+            "simulation" => {
+                let traffic_lights = traffic_light::initialize_traffic_lights();
+                simulation::run_simulation(traffic_lights);
+            },
+            "traffic_light" => {
+                let traffic_lights = traffic_light::initialize_traffic_lights();
+                traffic_light::run_traffic_lights(traffic_lights);
+            },
+            "analyzer" => {
+                flow_analyzer::run_flow_analyzer();
+            },
+            "monitoring" => {
+                system_monitoring::run_monitoring();
+            },
+            _ => {
+                eprintln!("Unknown component: {}", args[1]);
+            }
+        }
+    } else {
+        // If no argument is given, spawn all components as separate processes.
+        let current_exe = env::current_exe().expect("Failed to get current executable");
+        let components = ["simulation", "traffic_light", "analyzer", "monitoring"];
+        let mut children = Vec::new();
+        
+        for comp in &components {
+            let child = Command::new(&current_exe)
+                .arg(comp)
+                .spawn()
+                .expect(&format!("Failed to spawn {} process", comp));
+            println!("Spawned {} process", comp);
+            children.push(child);
+        }
+        
+        for mut child in children {
+            child.wait().expect("Child process encountered an error");
+        }
+    }
 }

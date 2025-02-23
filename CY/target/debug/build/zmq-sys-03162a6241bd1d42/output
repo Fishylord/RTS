@@ -1,0 +1,503 @@
+cargo:rerun-if-changed=build/main.rs
+cargo:rerun-if-env-changed=PROFILE
+cargo:rustc-link-lib=iphlpapi
+OPT_LEVEL = Some(0)
+TARGET = Some(x86_64-pc-windows-msvc)
+cargo:rerun-if-env-changed=VCINSTALLDIR
+VCINSTALLDIR = None
+cargo:rerun-if-env-changed=VSTEL_MSBuildProjectFullPath
+VSTEL_MSBuildProjectFullPath = None
+cargo:rerun-if-env-changed=VSCMD_ARG_VCVARS_SPECTRE
+VSCMD_ARG_VCVARS_SPECTRE = None
+cargo:rerun-if-env-changed=WindowsSdkDir
+WindowsSdkDir = None
+cargo:rerun-if-env-changed=WindowsSDKVersion
+WindowsSDKVersion = None
+cargo:rerun-if-env-changed=LIB
+LIB = None
+PATH = Some(C:\Users\User\Documents\Coding\RTS\CY\target\debug\deps;C:\Users\User\Documents\Coding\RTS\CY\target\debug;C:\Users\User\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib;C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\DAX Studio;C:\Program Files\Docker\Docker\resources\bin;C:\Users\User\.cargo\bin;C:\Program Files\Neovim\bin;C:\Users\User\AppData\Local\Programs\Python\Python311;C:\Users\User\AppData\Local\Programs\Python\Launcher\;C:\Users\User\.cargo\bin;C:\Users\User\AppData\Local\Microsoft\WindowsApps;C:\Users\User\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\User\AppData\Local\GitHubDesktop\bin;C:\Users\User\.dotnet\tools;C:\Program Files\nodejs;;c:\Users\User\.vscode\extensions\ms-python.debugpy-2025.0.0-win32-x64\bundled\scripts\noConfigScripts)
+cargo:rerun-if-env-changed=INCLUDE
+INCLUDE = None
+HOST = Some(x86_64-pc-windows-msvc)
+cargo:rerun-if-env-changed=CXX_x86_64-pc-windows-msvc
+CXX_x86_64-pc-windows-msvc = None
+cargo:rerun-if-env-changed=CXX_x86_64_pc_windows_msvc
+CXX_x86_64_pc_windows_msvc = None
+cargo:rerun-if-env-changed=HOST_CXX
+HOST_CXX = None
+cargo:rerun-if-env-changed=CXX
+CXX = None
+cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+CRATE_CC_NO_DEFAULTS = None
+CARGO_CFG_TARGET_FEATURE = Some(cmpxchg16b,fxsr,sse,sse2,sse3)
+DEBUG = Some(true)
+cargo:rerun-if-env-changed=CXXFLAGS
+CXXFLAGS = None
+cargo:rerun-if-env-changed=HOST_CXXFLAGS
+HOST_CXXFLAGS = None
+cargo:rerun-if-env-changed=CXXFLAGS_x86_64_pc_windows_msvc
+CXXFLAGS_x86_64_pc_windows_msvc = None
+cargo:rerun-if-env-changed=CXXFLAGS_x86_64-pc-windows-msvc
+CXXFLAGS_x86_64-pc-windows-msvc = None
+CARGO_ENCODED_RUSTFLAGS = Some()
+cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+channel.cpp
+address.cpp
+client.cpp
+clock.cpp
+ctx.cpp
+curve_client.cpp
+curve_mechanism_base.cpp
+dealer.cpp
+curve_server.cpp
+decoder_allocators.cpp
+devpoll.cpp
+dgram.cpp
+dish.cpp
+dist.cpp
+endpoint.cpp
+epoll.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+fq.cpp
+err.cpp
+gather.cpp
+gssapi_client.cpp
+gssapi_server.cpp
+gssapi_mechanism_base.cpp
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+io_object.cpp
+ip_resolver.cpp
+io_thread.cpp
+ip.cpp
+ipc_address.cpp
+kqueue.cpp
+ipc_connecter.cpp
+ipc_listener.cpp
+lb.cpp
+mailbox_safe.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ip.cpp(108): warning C4996: 'WSASocketA': Use WSASocketW() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ip.cpp(233): warning C4100: 'priority_': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ip.cpp(233): warning C4100: 's_': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ip.cpp(381): warning C4127: conditional expression is constant
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ip.cpp(394): warning C4127: conditional expression is constant
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ip.cpp(524): warning C4127: conditional expression is constant
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ip_resolver.cpp(89): warning C4130: '==': logical operation on address of string constant
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\compat.hpp(64): warning C4211: nonstandard extension used: redefined extern to static
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ip_resolver.cpp(92) : warning C4701: potentially uninitialized local variable 'addr' used
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+mailbox.cpp
+mechanism_base.cpp
+mechanism.cpp
+metadata.cpp
+msg.cpp
+mtrie.cpp
+norm_engine.cpp
+object.cpp
+null_mechanism.cpp
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+options.cpp
+pgm_receiver.cpp
+own.cpp
+pair.cpp
+pgm_sender.cpp
+peer.cpp
+pgm_socket.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\compat.hpp(64): warning C4211: nonstandard extension used: redefined extern to static
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\options.cpp(466): warning C4456: declaration of 'value' hides previous local declaration
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\options.cpp(315): note: see declaration of 'value'
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(493): warning C4244: '+=': conversion from 'int' to 'unsigned char', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(493): note: the template instantiation context (the oldest one first) is
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\mtrie.hpp(46): note: see reference to class template instantiation 'zmq::generic_mtrie_t<zmq::pipe_t>' being compiled
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(406): note: while compiling class template member function 'zmq::generic_mtrie_t<zmq::pipe_t>::rm_result zmq::generic_mtrie_t<zmq::pipe_t>::rm(zmq::generic_mtrie_t<zmq::pipe_t>::prefix_t,size_t,zmq::pipe_t *)'
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(507): warning C4244: '+=': conversion from 'int' to 'unsigned char', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+pipe.cpp
+plain_client.cpp
+plain_server.cpp
+poll.cpp
+poller_base.cpp
+polling_util.cpp
+pollset.cpp
+precompiled.cpp
+proxy.cpp
+pull.cpp
+pub.cpp
+push.cpp
+radix_tree.cpp
+radio.cpp
+random.cpp
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+raw_decoder.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+raw_encoder.cpp
+raw_engine.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+reaper.cpp
+rep.cpp
+router.cpp
+req.cpp
+scatter.cpp
+select.cpp
+signaler.cpp
+server.cpp
+session_base.cpp
+socket_base.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+socks_connecter.cpp
+socket_poller.cpp
+socks.cpp
+stream_connecter_base.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\session_base.cpp(453): warning C4100: 'handshaked_': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socket_base.cpp(704): warning C4456: declaration of 'rc' hides previous local declaration
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socket_base.cpp(542): note: see declaration of 'rc'
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socket_base.cpp(993): warning C4456: declaration of 'rc' hides previous local declaration
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socket_base.cpp(784): note: see declaration of 'rc'
+stream_listener_base.cpp
+stream_engine_base.cpp
+stream.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socks.cpp(282): warning C4244: '=': conversion from 'int' to 'unsigned char', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socks_connecter.cpp(138): warning C4245: '=': conversion from 'int' to 'zmq::fd_t', signed/unsigned mismatch
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socks_connecter.cpp(176): warning C4244: 'argument': conversion from 'int' to 'uint8_t', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socks_connecter.cpp(370): warning C4245: 'return': conversion from 'int' to 'zmq::fd_t', signed/unsigned mismatch
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\socks_connecter.cpp(393): warning C4245: 'return': conversion from 'int' to 'zmq::fd_t', signed/unsigned mismatch
+tcp_listener.cpp
+sub.cpp
+tcp_address.cpp
+tcp_connecter.cpp
+tcp.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+thread.cpp
+timers.cpp
+tipc_address.cpp
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+tipc_connecter.cpp
+tipc_listener.cpp
+trie.cpp
+udp_address.cpp
+udp_engine.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\tcp_address.cpp(198): warning C4244: 'return': conversion from 'int' to 'unsigned short', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\thread.cpp(139): warning C4100: 'disp': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\thread.cpp(138): warning C4100: 'ctx': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\thread.cpp(137): warning C4100: 'frame': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\thread.cpp(136): warning C4100: 'rec': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\thread.cpp(153): warning C4245: '=': conversion from 'int' to 'DWORD', signed/unsigned mismatch
+v1_decoder.cpp
+v1_encoder.cpp
+v2_decoder.cpp
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\trie.cpp(175): warning C4244: '+=': conversion from 'int' to 'unsigned char', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\trie.cpp(192): warning C4244: '=': conversion from 'int' to 'unsigned char', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\trie.cpp(313): warning C4244: '=': conversion from 'int' to 'unsigned char', possible loss of data
+v2_encoder.cpp
+vmci_address.cpp
+vmci_connecter.cpp
+v3_1_encoder.cpp
+vmci_listener.cpp
+vmci.cpp
+ws_address.cpp
+ws_decoder.cpp
+ws_connecter.cpp
+ws_encoder.cpp
+ws_engine.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+ws_listener.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\udp_engine.cpp(60): warning C4245: 'initializing': conversion from 'int' to 'zmq::fd_t', signed/unsigned mismatch
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\udp_engine.cpp(301): warning C4100: 'on_': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\udp_engine.cpp(301): warning C4100: 's_': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\udp_engine.cpp(367): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\udp_engine.cpp(427): warning C4996: 'inet_addr': Use inet_pton() or InetPton() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\ws_address.cpp(165): warning C4244: 'return': conversion from 'int' to 'unsigned short', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+xpub.cpp
+xsub.cpp
+zap_client.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\compat.hpp(64): warning C4211: nonstandard extension used: redefined extern to static
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+zmq_utils.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+zmtp_engine.cpp
+wepoll.c
+sha1.c
+zmq.cpp
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\atomic_counter.hpp(221): warning C4324: 'zmq::atomic_counter_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\zap_client.cpp(47): warning C4589: Constructor of abstract class 'zmq::zap_client_t' ignores initializer for virtual base class 'zmq::mechanism_base_t'
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\zap_client.cpp(47): note: virtual base classes are only initialized by the most-derived type
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\zap_client.cpp(264): warning C4589: Constructor of abstract class 'zmq::zap_client_common_handshake_t' ignores initializer for virtual base class 'zmq::mechanism_base_t'
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\zap_client.cpp(264): note: virtual base classes are only initialized by the most-derived type
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\own.hpp(126): warning C4324: 'zmq::own_t': structure was padded due to alignment specifier
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\zmtp_engine.cpp(345): warning C4100: 'downgrade_sub_': unreferenced formal parameter
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(236): warning C4244: '=': conversion from 'int' to 'unsigned char', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(236): note: the template instantiation context (the oldest one first) is
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\xpub.cpp(270): note: see reference to function template instantiation 'void zmq::generic_mtrie_t<zmq::pipe_t>::rm<zmq::xpub_t*>(zmq::pipe_t *,void (__cdecl *)(zmq::generic_mtrie_t<zmq::pipe_t>::prefix_t,size_t,Arg),Arg,bool)' being compiled
+        with
+        [
+            Arg=zmq::xpub_t *
+        ]
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\xpub.cpp(270): note: see the first reference to 'zmq::generic_mtrie_t<zmq::pipe_t>::rm' in 'zmq::xpub_t::xpipe_terminated'
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(243): warning C4244: '=': conversion from 'int' to 'unsigned char', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(304): warning C4244: '=': conversion from 'int' to 'unsigned char', possible loss of data
+C:\Users\User\.cargo\registry\src\index.crates.io-6f17d22bba15001f\zeromq-src-0.2.6+4.3.4\vendor\src\generic_mtrie_impl.hpp(308): warning C4244: '=': conversion from 'int' to 'unsigned char', possible loss of data
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+exit code: 0
+cargo:rerun-if-env-changed=AR_x86_64-pc-windows-msvc
+AR_x86_64-pc-windows-msvc = None
+cargo:rerun-if-env-changed=AR_x86_64_pc_windows_msvc
+AR_x86_64_pc_windows_msvc = None
+cargo:rerun-if-env-changed=HOST_AR
+HOST_AR = None
+cargo:rerun-if-env-changed=AR
+AR = None
+cargo:rerun-if-env-changed=ARFLAGS
+ARFLAGS = None
+cargo:rerun-if-env-changed=HOST_ARFLAGS
+HOST_ARFLAGS = None
+cargo:rerun-if-env-changed=ARFLAGS_x86_64_pc_windows_msvc
+ARFLAGS_x86_64_pc_windows_msvc = None
+cargo:rerun-if-env-changed=ARFLAGS_x86_64-pc-windows-msvc
+ARFLAGS_x86_64-pc-windows-msvc = None
+cargo:rustc-link-lib=static=zmq
+cargo:rustc-link-search=native=C:\Users\User\Documents\Coding\RTS\CY\target\debug\build\zmq-sys-03162a6241bd1d42\out\lib
+cargo:rerun-if-env-changed=CXXSTDLIB_x86_64-pc-windows-msvc
+CXXSTDLIB_x86_64-pc-windows-msvc = None
+cargo:rerun-if-env-changed=CXXSTDLIB_x86_64_pc_windows_msvc
+CXXSTDLIB_x86_64_pc_windows_msvc = None
+cargo:rerun-if-env-changed=HOST_CXXSTDLIB
+HOST_CXXSTDLIB = None
+cargo:rerun-if-env-changed=CXXSTDLIB
+CXXSTDLIB = None
+cargo:rustc-link-search=native=C:\Users\User\Documents\Coding\RTS\CY\target\debug\build\zmq-sys-03162a6241bd1d42\out\lib
+cargo:rustc-link-lib=static=zmq
+cargo:include=C:\Users\User\Documents\Coding\RTS\CY\target\debug\build\zmq-sys-03162a6241bd1d42\out\source\include
+cargo:lib=C:\Users\User\Documents\Coding\RTS\CY\target\debug\build\zmq-sys-03162a6241bd1d42\out\lib
+cargo:out=C:\Users\User\Documents\Coding\RTS\CY\target\debug\build\zmq-sys-03162a6241bd1d42\out

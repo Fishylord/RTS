@@ -1,0 +1,10 @@
+C:\Users\User\Documents\Coding\Rust\Practice1\target\debug\deps\libamq_protocol_types-689bb697ca1cf14f.rmeta: C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\lib.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\types.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\value.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\flags.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\generation.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\parsing.rs
+
+C:\Users\User\Documents\Coding\Rust\Practice1\target\debug\deps\amq_protocol_types-689bb697ca1cf14f.d: C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\lib.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\types.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\value.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\flags.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\generation.rs C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\parsing.rs
+
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\lib.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\types.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\value.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\flags.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\generation.rs:
+C:\Users\User\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\amq-protocol-types-7.2.2\src\parsing.rs:

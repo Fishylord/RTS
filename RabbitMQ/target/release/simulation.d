@@ -1,0 +1,1 @@
+C:\Users\User\Documents\Coding\Rust\Practice1\target\release\simulation.exe: C:\Users\User\Documents\Coding\Rust\Practice1\src\lanes.rs C:\Users\User\Documents\Coding\Rust\Practice1\src\mq.rs C:\Users\User\Documents\Coding\Rust\Practice1\src\simulation.rs

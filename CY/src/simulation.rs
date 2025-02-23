@@ -1,15 +1,16 @@
-use std::sync::{Arc, mpsc::Sender};
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
 use rand::Rng;
 use std::collections::{HashMap, BinaryHeap};
 use std::cmp::Ordering;
+use serde::{Serialize, Deserialize};
+use zmq;
 
 use crate::traffic_light::{TrafficLightMap, can_proceed_lane};
-use crate::system_monitoring::LogEvent;
 use crate::lanes::{load_lanes, Lane, LaneCategory};
 
-/// Metrics recorded for each car’s trip.
+#[derive(Serialize, Deserialize, Debug)]
 pub struct CarMetrics {
     pub id: u32,
     pub wait_time: f64,
@@ -17,7 +18,6 @@ pub struct CarMetrics {
     pub total_time: f64,
 }
 
-/// A road segment (optional reference structure).
 #[derive(Debug, Clone)]
 pub struct RoadSegment {
     pub from: u32,
@@ -26,7 +26,6 @@ pub struct RoadSegment {
     pub lanes: u32,
 }
 
-/// Internal helper for Dijkstra’s algorithm over intersections.
 #[derive(Debug)]
 struct State {
     cost: f64,
@@ -50,14 +49,12 @@ impl PartialOrd for State {
     }
 }
 
-/// Converts intersection ID (1..16) to (row, col) in a 4×4 grid.
 fn intersection_to_coords(inter: u32) -> (u32, u32) {
     let row = (inter - 1) / 4;
     let col = (inter - 1) % 4;
     (row, col)
 }
 
-/// New function: find_lane_path computes a route based on internal lanes.
 fn find_lane_path(start: u32, end: u32, lanes: &Vec<Lane>) -> Option<Vec<Lane>> {
     #[derive(Debug)]
     struct LaneState {
@@ -134,26 +131,39 @@ fn find_lane_path(start: u32, end: u32, lanes: &Vec<Lane>) -> Option<Vec<Lane>> 
     Some(path)
 }
 
-/// Helper: returns the current system time in seconds (Unix epoch).
 fn current_time_secs() -> u64 {
     use std::time::{SystemTime, UNIX_EPOCH};
     SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
 }
 
-/// Simulate a single car traveling from an input boundary lane to an output boundary lane.
+pub type SimEvent = Arc<Mutex<HashMap<u32, u32>>>;
+
+pub fn initialize_simdata() -> SimEvent {
+    let mut map = HashMap::new();
+    let lanes = load_lanes();
+    for lane in lanes {
+        map.insert(lane.id, 0);
+    }
+    Arc::new(Mutex::new(map))
+}
+
+// Helper function: creates a new log socket from the given context.
+fn create_log_socket(ctx: &zmq::Context) -> zmq::Socket {
+    let sock = ctx.socket(zmq::PUSH).expect("Failed to create log PUSH socket");
+    sock.connect("tcp://localhost:7000").expect("Failed to connect to tcp://localhost:7000");
+    sock
+}
+
 pub fn simulate_car(
     car_id: u32,
     traffic_lights: TrafficLightMap,
-    log_tx: Sender<LogEvent>,
     entry_lanes: &[Lane],
     exit_lanes: &[Lane],
+    sim_event: Arc<Mutex<HashMap<u32, u32>>>,
+    ctx: &zmq::Context,
 ) -> CarMetrics {
     let mut rng = rand::thread_rng();
     let speed: f64 = rng.gen_range(70.0..=90.0);
-    // If your version of rand complains, you might try:
-    // let speed: f64 = rng.random_range(10.0..=30.0);
-
-    // Choose a random entry and exit lane.
     let input_lane = entry_lanes[rng.gen_range(0..entry_lanes.len())].clone();
     let mut exit_lane = exit_lanes[rng.gen_range(0..exit_lanes.len())].clone();
     while exit_lane.id == input_lane.id {
@@ -169,35 +179,34 @@ pub fn simulate_car(
         .filter(|l| l.category == LaneCategory::Internal)
         .collect();
 
-    let lane_route = match find_lane_path(start_intersection, end_intersection, &internal_lanes) {
-        Some(route) => route,
-        None => Vec::new(),
-    };
-
+    let lane_route = find_lane_path(start_intersection, end_intersection, &internal_lanes).unwrap_or_default();
     let lane_ids: Vec<u32> = lane_route.iter().map(|lane| lane.id).collect();
-    let gen_log = LogEvent {
-        source: format!("Car-{}", car_id),
-        message: format!(
-            "Generated vehicle with speed {:.2} m/s; Entry Lane {} (Inter. {}), Exit Lane {} (Inter. {}); Lane Route: {:?}",
-            speed, input_lane.id, input_lane.end_intersection, exit_lane.id, exit_lane.start_intersection, lane_ids
-        ),
-        timestamp: current_time_secs(),
-    };
-    log_tx.send(gen_log).ok();
+
+    let log_socket = create_log_socket(ctx);
+    let gen_log = serde_json::json!({
+        "source": format!("Car-{}", car_id),
+        "message": format!("Generated vehicle with speed {:.2} m/s; Entry Lane {} (Inter. {}), Exit Lane {} (Inter. {}); Lane Route: {:?}", 
+                           speed, input_lane.id, input_lane.end_intersection, exit_lane.id, exit_lane.start_intersection, lane_ids),
+        "timestamp": current_time_secs()
+    });
+    log_socket.send(gen_log.to_string().as_bytes(), 0).expect("Failed to send log event");
 
     let start_time = Instant::now();
     let mut total_wait_time = 0.0;
     let mut total_drive_time = 0.0;
 
-    // 1. Travel the entry lane.
     let travel_time = input_lane.length / speed;
     thread::sleep(Duration::from_secs_f64(travel_time));
     total_drive_time += travel_time;
 
-    // 2. Follow the lane route.
     for lane in lane_route {
+        {
+            let mut stats = sim_event.lock().unwrap();
+            *stats.entry(lane.id).or_insert(0) += 1;
+            println!("car {} entered lane {}", car_id, lane.id);
+        }
+        
         let wait_start = Instant::now();
-        // Wait until the individual lane's light turns green.
         loop {
             let can_go = {
                 let locked = traffic_lights.lock().unwrap();
@@ -213,21 +222,24 @@ pub fn simulate_car(
         let seg_time = lane.length / speed;
         thread::sleep(Duration::from_secs_f64(seg_time));
         total_drive_time += seg_time;
+        {
+            let mut stats = sim_event.lock().unwrap();
+            *stats.entry(lane.id).or_insert(0) -= 1;
+            println!("car {} left lane {}", car_id, lane.id);
+        }
     }
 
-    // 3. Travel the exit lane.
     let exit_time = exit_lane.length / speed;
     thread::sleep(Duration::from_secs_f64(exit_time));
     total_drive_time += exit_time;
 
     let total_time = start_time.elapsed().as_secs_f64();
-    let comp_log = LogEvent {
-        source: format!("Car-{}", car_id),
-        message: format!("Completed journey: Wait={:.2}s, Drive={:.2}s, Total={:.2}s",
-                        total_wait_time, total_drive_time, total_time),
-        timestamp: current_time_secs(),
-    };
-    log_tx.send(comp_log).ok();
+    let comp_log = serde_json::json!({
+        "source": format!("Car-{}", car_id),
+        "message": format!("Completed journey: Wait={:.2}s, Drive={:.2}s, Total={:.2}s", total_wait_time, total_drive_time, total_time),
+        "timestamp": current_time_secs()
+    });
+    log_socket.send(comp_log.to_string().as_bytes(), 0).expect("Failed to send log event");
 
     CarMetrics {
         id: car_id,
@@ -237,17 +249,18 @@ pub fn simulate_car(
     }
 }
 
-/// Spawns multiple cars, each from an InputBoundary lane to an OutputBoundary lane.
-pub fn run_simulation(
-    traffic_lights: TrafficLightMap,
-    log_tx: Sender<LogEvent>,
-) {
-    let (result_tx, result_rx) = std::sync::mpsc::channel();
+pub fn run_simulation(traffic_lights: TrafficLightMap) {
+    let context = zmq::Context::new();
+    // Create a PUSH socket for sending simulation updates.
+    let sim_socket = context.socket(zmq::PUSH).expect("Failed to create simulation PUSH socket");
+    sim_socket.bind("tcp://*:7001").expect("Failed to bind tcp://*:7001");
 
-    // 1. Load all lanes.
+    // For logging outside of car threads.
+    let log_socket = context.socket(zmq::PUSH).expect("Failed to create log PUSH socket");
+    log_socket.connect("tcp://localhost:7000").expect("Failed to connect to tcp://localhost:7000");
+
+    let sim_event: SimEvent = initialize_simdata();
     let all_lanes = load_lanes();
-
-    // 2. Filter boundary lanes.
     let entry_lanes: Vec<Lane> = all_lanes.iter()
         .filter(|l| l.category == LaneCategory::InputBoundary)
         .cloned()
@@ -257,42 +270,50 @@ pub fn run_simulation(
         .cloned()
         .collect();
 
-    // 3. Launch 30 car threads.
+    // Share the context in an Arc so car threads can create their own log sockets.
+    let ctx_arc = Arc::new(context);
     let mut handles = vec![];
+
     for car_id in 1..=30 {
-        let tl_clone = Arc::clone(&traffic_lights);
-        let log_tx_clone = log_tx.clone();
-        let result_tx_clone = result_tx.clone();
+        let tl_clone = traffic_lights.clone();
         let entry_clone = entry_lanes.clone();
         let exit_clone = exit_lanes.clone();
-
+        let sim_event_clone = sim_event.clone();
+        let ctx_clone = Arc::clone(&ctx_arc);
         let handle = thread::spawn(move || {
-            let metrics = simulate_car(car_id, tl_clone, log_tx_clone, &entry_clone, &exit_clone);
-            result_tx_clone.send(metrics).unwrap();
+            let car_metrics = simulate_car(car_id, tl_clone, &entry_clone, &exit_clone, sim_event_clone, &ctx_clone);
+            println!("Car {} metrics: {:?}", car_id, car_metrics);
         });
         handles.push(handle);
+    }
+
+    // Spawn a thread to periodically send simulation updates.
+    {
+        let sim_event_sender = sim_event.clone();
+        // Instead of cloning sim_socket (which is not cloneable), create a new PUSH socket from the shared context.
+        let ctx_for_sim = Arc::clone(&ctx_arc);
+        thread::spawn(move || {
+            let sim_sock = ctx_for_sim.socket(zmq::PUSH).expect("Failed to create simulation update socket");
+            // This new socket connects to the same bound endpoint.
+            sim_sock.connect("tcp://localhost:7001").expect("Failed to connect to tcp://localhost:7001");
+            loop {
+                thread::sleep(Duration::from_secs(5));
+                if let Ok(lanes) = sim_event_sender.lock() {
+                    let json_data = serde_json::to_string(&*lanes).unwrap();
+                    sim_sock.send(json_data.as_bytes(), 0).expect("Failed to send simulation update");
+                }
+            }
+        });
     }
 
     for handle in handles {
         handle.join().unwrap();
     }
 
-    // 4. Compute average times.
-    let mut total_wait = 0.0;
-    let mut total_drive = 0.0;
-    let mut total_total = 0.0;
-    for _ in 1..=30 {
-        let m = result_rx.recv().unwrap();
-        total_wait += m.wait_time;
-        total_drive += m.drive_time;
-        total_total += m.total_time;
-    }
-
-    let avg_log = LogEvent {
-        source: "Simulation".to_string(),
-        message: format!("Average Times - Wait: {:.2} s, Drive: {:.2} s, Total: {:.2} s",
-                         total_wait / 30.0, total_drive / 30.0, total_total / 30.0),
-        timestamp: current_time_secs(),
-    };
-    log_tx.send(avg_log).ok();
+    let avg_log = serde_json::json!({
+        "source": "Simulation",
+        "message": "Simulation complete.",
+        "timestamp": current_time_secs()
+    });
+    log_socket.send(avg_log.to_string().as_bytes(), 0).expect("Failed to send log event");
 }
