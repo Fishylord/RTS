@@ -181,17 +181,21 @@ async fn simulate_car(
     channel: &lapin::Channel,
     sim_event: SimEvent,
     light_status_map: LightStatusMap,
+    lane_locks: Arc<HashMap<u32, Arc<Mutex<()>>>>,
 ) {
     let mut rng = ChaCha8Rng::seed_from_u64(42 + car_id as u64);
+    // Warning: if the warning persists, consider using the updated method if available.
     let speed: f64 = rng.gen_range(70.0..=90.0);
 
-    let all_lanes = load_lanes();
-    let entry_lanes: Vec<Lane> = all_lanes.iter()
-        .filter(|l| l.category == LaneCategory::InputBoundary)
+    let all_lanes = lanes::load_lanes();
+    let entry_lanes: Vec<Lane> = all_lanes
+        .iter()
+        .filter(|l| l.category == lanes::LaneCategory::InputBoundary)
         .cloned()
         .collect();
-    let exit_lanes: Vec<Lane> = all_lanes.iter()
-        .filter(|l| l.category == LaneCategory::OutputBoundary)
+    let exit_lanes: Vec<Lane> = all_lanes
+        .iter()
+        .filter(|l| l.category == lanes::LaneCategory::OutputBoundary)
         .cloned()
         .collect();
 
@@ -201,12 +205,12 @@ async fn simulate_car(
         exit_lane = exit_lanes[rng.gen_range(0..exit_lanes.len())].clone();
     }
 
-    // Compute route through internal lanes.
-    let start_intersection = input_lane.end_intersection; // For input lanes, end_intersection is the grid entry.
-    let end_intersection = exit_lane.start_intersection;   // For output lanes, start_intersection is the grid exit.
-    let internal_lanes: Vec<Lane> = load_lanes()
+    // Generate route through internal lanes:
+    let start_intersection = input_lane.end_intersection;
+    let end_intersection = exit_lane.start_intersection;
+    let internal_lanes: Vec<Lane> = lanes::load_lanes()
         .into_iter()
-        .filter(|l| l.category == LaneCategory::Internal)
+        .filter(|l| l.category == lanes::LaneCategory::Internal)
         .collect();
     let lane_route = match find_lane_path(start_intersection, end_intersection, &internal_lanes) {
         Some(route) => route,
@@ -231,54 +235,63 @@ async fn simulate_car(
     };
     mq::publish_message(channel, "logs", "", &log).await;
 
+    // Process the entry lane with FIFO enforcement:
+    if let Some(lock) = lane_locks.get(&input_lane.id) {
+        let _guard = lock.lock().await;
+        let travel_time = input_lane.length / speed;
+        tokio::time::sleep(Duration::from_secs_f64(travel_time)).await;
+    }
+
     let start_time = tokio::time::Instant::now();
     let mut total_wait_time = 0.0;
     let mut total_drive_time = 0.0;
 
-    // Travel the entry lane.
-    let travel_time = input_lane.length / speed;
-    sleep(Duration::from_secs_f64(travel_time)).await;
-    total_drive_time += travel_time;
-
-    // Follow the lane route.
+    // Process each lane in the computed route in FIFO order.
     for lane in lane_route {
-        // When entering the lane, update simulation state.
-        {
-            let mut stats = sim_event.lock().await;
-            *stats.entry(lane.id).or_insert(0) += 1;
-            println!("Car {} entered lane {}", car_id, lane.id);
-        }
+        if let Some(lock) = lane_locks.get(&lane.id) {
+            // Acquire the lock for the lane.
+            let _guard = lock.lock().await;
 
-        // Wait until the traffic light for this lane is green.
-        let wait_start = tokio::time::Instant::now();
-        loop {
-            let status = {
-                let statuses = light_status_map.lock().await;
-                statuses.get(&lane.id).cloned().unwrap_or("Red".to_string())
-            };
-            if status == "Green" {
-                break;
+            {
+                let mut stats = sim_event.lock().await;
+                *stats.entry(lane.id).or_insert(0) += 1;
+                println!("Car {} entered lane {}", car_id, lane.id);
             }
-            sleep(Duration::from_millis(100)).await;
-        }
-        total_wait_time += wait_start.elapsed().as_secs_f64();
 
-        let seg_time = lane.length / speed;
-        sleep(Duration::from_secs_f64(seg_time)).await;
-        total_drive_time += seg_time;
+            // Wait until the traffic light for this lane is green.
+            let wait_start = tokio::time::Instant::now();
+            loop {
+                let status = {
+                    let statuses = light_status_map.lock().await;
+                    statuses.get(&lane.id).cloned().unwrap_or("Red".to_string())
+                };
+                if status == "Green" {
+                    break;
+                }
+                tokio::time::sleep(Duration::from_millis(100)).await;
+            }
+            total_wait_time += wait_start.elapsed().as_secs_f64();
 
-        // When leaving the lane, update simulation state.
-        {
-            let mut stats = sim_event.lock().await;
-            *stats.entry(lane.id).or_insert(0) -= 1;
-            println!("Car {} left lane {}", car_id, lane.id);
+            let seg_time = lane.length / speed;
+            tokio::time::sleep(Duration::from_secs_f64(seg_time)).await;
+            total_drive_time += seg_time;
+
+            {
+                let mut stats = sim_event.lock().await;
+                *stats.entry(lane.id).or_insert(0) -= 1;
+                println!("Car {} left lane {}", car_id, lane.id);
+            }
+            // Introduce a small delay to simulate junction usage.
+            tokio::time::sleep(Duration::from_millis(50)).await;
         }
     }
 
-    // Travel the exit lane.
-    let exit_time = exit_lane.length / speed;
-    sleep(Duration::from_secs_f64(exit_time)).await;
-    total_drive_time += exit_time;
+    // Process the exit lane similarly.
+    if let Some(lock) = lane_locks.get(&exit_lane.id) {
+        let _guard = lock.lock().await;
+        let exit_time = exit_lane.length / speed;
+        tokio::time::sleep(Duration::from_secs_f64(exit_time)).await;
+    }
 
     let total_time = start_time.elapsed().as_secs_f64();
     let comp_log = LogEvent {
@@ -294,11 +307,9 @@ async fn main() {
     let channel = mq::create_channel().await;
     mq::declare_exchange(&channel, "simulation.updates", lapin::ExchangeKind::Fanout).await;
     mq::declare_exchange(&channel, "logs", lapin::ExchangeKind::Fanout).await;
-    // Also declare the light_status exchange for consistency.
     mq::declare_exchange(&channel, "light_status", lapin::ExchangeKind::Fanout).await;
 
     let sim_event = initialize_simdata();
-    // Create a shared state for holding the latest light statuses.
     let light_status_map: LightStatusMap = Arc::new(Mutex::new(HashMap::new()));
 
     // Spawn a task to listen for light status updates.
@@ -310,13 +321,29 @@ async fn main() {
         }
     });
 
+    // Create a per-lane lock map for FIFO ordering.
+    let lanes = lanes::load_lanes();
+    let mut locks_map = HashMap::new();
+    for lane in &lanes {
+        locks_map.insert(lane.id, Arc::new(Mutex::new(())));
+    }
+    let lane_locks = Arc::new(locks_map);
+
     let mut handles = vec![];
     for car_id in 1..=30 {
         let channel_clone = channel.clone();
         let sim_event_clone = Arc::clone(&sim_event);
         let light_status_map_clone = Arc::clone(&light_status_map);
+        let lane_locks_clone = Arc::clone(&lane_locks);
         let handle = tokio::spawn(async move {
-            simulate_car(car_id, &channel_clone, sim_event_clone, light_status_map_clone).await;
+            simulate_car(
+                car_id,
+                &channel_clone,
+                sim_event_clone,
+                light_status_map_clone,
+                lane_locks_clone,
+            )
+            .await;
         });
         handles.push(handle);
     }
