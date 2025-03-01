@@ -1,1 +1,1 @@
-C:\Users\User\Documents\Coding\Rust\Practice1\target\debug\system_monitoring.exe: C:\Users\User\Documents\Coding\Rust\Practice1\src\mq.rs C:\Users\User\Documents\Coding\Rust\Practice1\src\system_monitoring.rs
+C:\Users\62811\Documents\GitHub\RTS\RabbitMQ\target\debug\system_monitoring.exe: C:\Users\62811\Documents\GitHub\RTS\RabbitMQ\src\mq.rs C:\Users\62811\Documents\GitHub\RTS\RabbitMQ\src\system_monitoring.rs

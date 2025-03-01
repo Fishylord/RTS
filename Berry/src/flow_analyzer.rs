@@ -33,27 +33,25 @@ fn current_time_secs() -> u64 {
     SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs()
 }
 
-#[tokio::main]
-async fn main() {
+pub async fn run_flow_analyzer() -> Result<(), Box<dyn std::error::Error>> {
     let channel = create_channel().await;
     declare_exchange(&channel, "simulation.updates", lapin::ExchangeKind::Fanout).await;
     declare_exchange(&channel, "recommendations", lapin::ExchangeKind::Fanout).await;
     declare_exchange(&channel, "logs", lapin::ExchangeKind::Fanout).await;
 
-    // Create a temporary queue and bind it to the simulation.updates exchange.
     let queue = channel.queue_declare("", QueueDeclareOptions::default(), FieldTable::default())
-        .await.expect("Queue declare failed");
+        .await?;
     channel.queue_bind(queue.name().as_str(), "simulation.updates", "", QueueBindOptions::default(), FieldTable::default())
-        .await.expect("Queue bind failed");
+        .await?;
 
     let mut consumer = channel.basic_consume(queue.name().as_str(), "flow_analyzer", BasicConsumeOptions::default(), FieldTable::default())
-        .await.expect("Failed to create consumer");
+        .await?;
 
     println!("Flow Analyzer waiting for simulation updates...");
 
     while let Some(delivery_result) = consumer.next().await {
         if let Ok(delivery) = delivery_result {
-            let data = delivery.data;
+            let data = delivery.data.clone();
             if let Ok(update) = serde_json::from_slice::<TrafficUpdate>(&data) {
                 println!("Received update: {:?}", update);
                 if update.vehicle_count >= 4 {
@@ -71,7 +69,15 @@ async fn main() {
                     publish_message(&channel, "logs", "", &log).await;
                 }
             }
-            delivery.ack(BasicAckOptions::default()).await.expect("Ack failed");
+            delivery.ack(BasicAckOptions::default()).await?;
         }
+    }
+    Ok(())
+}
+
+#[tokio::main]
+async fn main() {
+    if let Err(e) = run_flow_analyzer().await {
+        eprintln!("Error in flow analyzer: {}", e);
     }
 }

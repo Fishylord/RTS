@@ -1,0 +1,1 @@
+C:\Users\62811\Documents\GitHub\RTS\Berry\target\debug\traffic_light.exe: C:\Users\62811\Documents\GitHub\RTS\Berry\src\lanes.rs C:\Users\62811\Documents\GitHub\RTS\Berry\src\model.rs C:\Users\62811\Documents\GitHub\RTS\Berry\src\mq.rs C:\Users\62811\Documents\GitHub\RTS\Berry\src\traffic_light.rs

@@ -12,7 +12,7 @@ cargo:rerun-if-env-changed=CARGO_CFG_TARGET_OS
 cargo:rerun-if-env-changed=CARGO_CFG_TARGET_ENV
 cargo:rerun-if-env-changed=CARGO_CFG_TARGET_ENDIAN
 OPT_LEVEL = Some(3)
-OUT_DIR = Some(C:\Users\User\Documents\Coding\RTS\Berry\target\release\build\ring-1f85e75fe4ba8654\out)
+OUT_DIR = Some(C:\Users\62811\Documents\GitHub\RTS\Berry\target\release\build\ring-1f85e75fe4ba8654\out)
 TARGET = Some(x86_64-pc-windows-msvc)
 cargo:rerun-if-env-changed=VCINSTALLDIR
 VCINSTALLDIR = None
@@ -26,7 +26,7 @@ cargo:rerun-if-env-changed=WindowsSDKVersion
 WindowsSDKVersion = None
 cargo:rerun-if-env-changed=LIB
 LIB = None
-PATH = Some(C:\Users\User\Documents\Coding\RTS\Berry\target\release\deps;C:\Users\User\Documents\Coding\RTS\Berry\target\release;C:\Users\User\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib;C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\DAX Studio;C:\Program Files\Docker\Docker\resources\bin;C:\Users\User\.cargo\bin;C:\Program Files\Neovim\bin;C:\Users\User\AppData\Local\Programs\Python\Python311;C:\Users\User\AppData\Local\Programs\Python\Launcher\;C:\Users\User\.cargo\bin;C:\Users\User\AppData\Local\Microsoft\WindowsApps;C:\Users\User\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\User\AppData\Local\GitHubDesktop\bin;C:\Users\User\.dotnet\tools;C:\Program Files\nodejs;;c:\Users\User\.vscode\extensions\ms-python.debugpy-2025.0.0-win32-x64\bundled\scripts\noConfigScripts)
+PATH = Some(C:\Users\62811\Documents\GitHub\RTS\Berry\target\release\deps;C:\Users\62811\Documents\GitHub\RTS\Berry\target\release;C:\Users\62811\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Users\62811\AppData\Local\Programs\Python\Python311;C:\Users\62811\AppData\Local\Programs\Python\Python311\Scripts;C:\Program Files\Java\jdk-20\bin;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\Users\62811\Downloads\ripgrep-14.1.0-i686-pc-windows-msvc\ripgrep-14.1.0-i686-pc-windows-msvc;C:\Users\62811\.cargo\bin;C:\Users\62811\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\62811\AppData\Local\Programs\Python\Python310\;C:\Users\62811\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Azure Data Studio\bin;C:\Users\62811\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\62811\AppData\Local\GitHubDesktop\bin;c:\Users\62811\.vscode\extensions\ms-python.debugpy-2025.0.0-win32-x64\bundled\scripts\noConfigScripts)
 cargo:rerun-if-env-changed=INCLUDE
 INCLUDE = None
 HOST = Some(x86_64-pc-windows-msvc)
@@ -52,13 +52,19 @@ cargo:rerun-if-env-changed=CFLAGS_x86_64-pc-windows-msvc
 CFLAGS_x86_64-pc-windows-msvc = None
 CARGO_ENCODED_RUSTFLAGS = Some()
 curve25519.c
+C:\Users\62811\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ring-0.17.10\crypto\curve25519\./curve25519_tables.h(1): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
+C:\Users\62811\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ring-0.17.10\crypto\curve25519\../../third_party/fiat/curve25519_64_msvc.h(1): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 aes_nohw.c
+C:\Users\62811\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ring-0.17.10\crypto/fipsmodule/aes/aes_nohw.c(1): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 montgomery.c
 montgomery_inv.c
 ecp_nistz.c
+C:\Users\62811\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ring-0.17.10\crypto\fipsmodule\ec\ecp_nistz.h(1): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 gfp_p256.c
 gfp_p384.c
+C:\Users\62811\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ring-0.17.10\crypto\fipsmodule\ec\ecp_nistz.h(1): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 p256.c
+C:\Users\62811\.cargo\registry\src\index.crates.io-6f17d22bba15001f\ring-0.17.10\crypto\fipsmodule\ec\./util.h(1): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 limbs.c
 mem.c
 poly1305.c
@@ -68,7 +74,7 @@ curve25519_64_adx.c
 p256-nistz.c
 cargo:rustc-link-lib=static=ring_core_0_17_10_
 OPT_LEVEL = Some(3)
-OUT_DIR = Some(C:\Users\User\Documents\Coding\RTS\Berry\target\release\build\ring-1f85e75fe4ba8654\out)
+OUT_DIR = Some(C:\Users\62811\Documents\GitHub\RTS\Berry\target\release\build\ring-1f85e75fe4ba8654\out)
 TARGET = Some(x86_64-pc-windows-msvc)
 cargo:rerun-if-env-changed=VCINSTALLDIR
 VCINSTALLDIR = None
@@ -82,7 +88,7 @@ cargo:rerun-if-env-changed=WindowsSDKVersion
 WindowsSDKVersion = None
 cargo:rerun-if-env-changed=LIB
 LIB = None
-PATH = Some(C:\Users\User\Documents\Coding\RTS\Berry\target\release\deps;C:\Users\User\Documents\Coding\RTS\Berry\target\release;C:\Users\User\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib;C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\DAX Studio;C:\Program Files\Docker\Docker\resources\bin;C:\Users\User\.cargo\bin;C:\Program Files\Neovim\bin;C:\Users\User\AppData\Local\Programs\Python\Python311;C:\Users\User\AppData\Local\Programs\Python\Launcher\;C:\Users\User\.cargo\bin;C:\Users\User\AppData\Local\Microsoft\WindowsApps;C:\Users\User\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\User\AppData\Local\GitHubDesktop\bin;C:\Users\User\.dotnet\tools;C:\Program Files\nodejs;;c:\Users\User\.vscode\extensions\ms-python.debugpy-2025.0.0-win32-x64\bundled\scripts\noConfigScripts)
+PATH = Some(C:\Users\62811\Documents\GitHub\RTS\Berry\target\release\deps;C:\Users\62811\Documents\GitHub\RTS\Berry\target\release;C:\Users\62811\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib\rustlib\x86_64-pc-windows-msvc\lib;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\150\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\160\DTS\Binn\;C:\Program Files\Azure Data Studio\bin;C:\Users\62811\AppData\Local\Programs\Python\Python311;C:\Users\62811\AppData\Local\Programs\Python\Python311\Scripts;C:\Program Files\Java\jdk-20\bin;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\Users\62811\Downloads\ripgrep-14.1.0-i686-pc-windows-msvc\ripgrep-14.1.0-i686-pc-windows-msvc;C:\Users\62811\.cargo\bin;C:\Users\62811\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\62811\AppData\Local\Programs\Python\Python310\;C:\Users\62811\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Azure Data Studio\bin;C:\Users\62811\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\62811\AppData\Local\GitHubDesktop\bin;c:\Users\62811\.vscode\extensions\ms-python.debugpy-2025.0.0-win32-x64\bundled\scripts\noConfigScripts)
 cargo:rerun-if-env-changed=INCLUDE
 INCLUDE = None
 HOST = Some(x86_64-pc-windows-msvc)
@@ -109,7 +115,7 @@ CFLAGS_x86_64-pc-windows-msvc = None
 CARGO_ENCODED_RUSTFLAGS = Some()
 constant_time_test.c
 cargo:rustc-link-lib=static=ring_core_0_17_10__test
-cargo:rustc-link-search=native=C:\Users\User\Documents\Coding\RTS\Berry\target\release\build\ring-1f85e75fe4ba8654\out
+cargo:rustc-link-search=native=C:\Users\62811\Documents\GitHub\RTS\Berry\target\release\build\ring-1f85e75fe4ba8654\out
 cargo:rerun-if-changed=crypto\chacha\asm\chacha-armv4.pl
 cargo:rerun-if-changed=crypto\chacha\asm\chacha-armv8.pl
 cargo:rerun-if-changed=crypto\chacha\asm\chacha-x86.pl

@@ -1,5 +1,5 @@
 [package]
-name = "Practice1"
+name = "RabbitMQ"
 version = "0.1.0"
 edition = "2021"
 
