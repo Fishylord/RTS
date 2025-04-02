@@ -1,1 +1,0 @@
-C:\Users\User\Documents\Coding\RTS\RabbitMQ\target\debug\traffic_light.exe: C:\Users\User\Documents\Coding\RTS\RabbitMQ\src\lanes.rs C:\Users\User\Documents\Coding\RTS\RabbitMQ\src\model.rs C:\Users\User\Documents\Coding\RTS\RabbitMQ\src\mq.rs C:\Users\User\Documents\Coding\RTS\RabbitMQ\src\traffic_light.rs

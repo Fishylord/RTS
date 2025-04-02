@@ -1,1 +1,0 @@
-C:\Users\User\Documents\Coding\Rust\Practice1\target\release\flow_analyzer.exe: C:\Users\User\Documents\Coding\Rust\Practice1\src\flow_analyzer.rs C:\Users\User\Documents\Coding\Rust\Practice1\src\mq.rs

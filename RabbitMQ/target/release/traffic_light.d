@@ -1,1 +1,0 @@
-C:\Users\User\Documents\Coding\Rust\Practice1\target\release\traffic_light.exe: C:\Users\User\Documents\Coding\Rust\Practice1\src\mq.rs C:\Users\User\Documents\Coding\Rust\Practice1\src\traffic_light.rs
