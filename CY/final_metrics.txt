@@ -1,0 +1,5 @@
+Average Metrics:
+Simulated Times: Wait=71.99s, Drive=101.80s, Total=173.79s
+Wall-Clock Time: 0.55s
+Lane Queue Overhead: 0.19s
+CPU Processing Time: 0.44s
