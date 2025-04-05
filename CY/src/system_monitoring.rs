@@ -7,6 +7,8 @@ use serde::{Serialize, Deserialize};
 use std::path::Path;
 use serde_json::Value;
 use std::process::Stdio;
+use plotters::prelude::*;
+use plotters::style::HSLColor;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct JunctionTimingLog {
@@ -171,7 +173,7 @@ async fn show_logs_menu() -> Result<(), Box<dyn Error>> {
         match choice {
             "1" => show_car_logs().await?,
             "2" => show_light_timings_logs().await?,
-            "3" => println!("Wait Time Heatmap not yet implemented."),
+            "3" => show_wait_time_heatmap().await?,
             "4" => break,
             _ => println!("Invalid choice. Please try again."),
         }
@@ -516,5 +518,73 @@ async fn show_traffic_light_metrics() -> Result<(), Box<dyn Error>> {
     println!("Press Enter to return.");
     let mut temp = String::new();
     io::stdin().read_line(&mut temp)?;
+    Ok(())
+}
+
+#[derive(Deserialize, Debug)]
+struct LaneWaitingTime {
+    lane_id: u32,
+    average_waiting_time: f64,
+    timestamp: u64,
+}
+
+
+async fn show_wait_time_heatmap() -> Result<(), Box<dyn Error>> {
+    // Sample data (replace with your actual data)
+let data: Vec<Vec<Option<f64>>> = vec![
+    vec![Some(0.1), Some(0.2), Some(0.3)],
+    vec![Some(0.4), None, Some(0.6)],  // <- Missing value at (1,1)
+    vec![Some(0.7), Some(0.8), Some(0.9)],
+];
+
+    let rows = data.len();
+    let cols = data[0].len();
+
+    // Create a heatmap image
+    let root = BitMapBackend::new("heatmap.png", (400, 400)).into_drawing_area();
+    root.fill(&WHITE)?;
+
+    // Set up the chart with correct ranges
+    let x_range = 0..cols;
+    let y_range = 0..rows;
+
+    let mut chart = ChartBuilder::on(&root)
+        .caption("Heatmap", ("Arial", 20))
+        .margin(10)
+        .set_label_area_size(LabelAreaPosition::Left, 40)
+        .set_label_area_size(LabelAreaPosition::Bottom, 40)
+        .build_cartesian_2d(x_range.clone(), y_range.clone())?;
+
+    chart
+        .configure_mesh()
+        .x_desc("X Axis")
+        .y_desc("Y Axis")
+        .disable_mesh()
+        .draw()?;
+
+    for (y, row) in data.iter().enumerate() {
+        for (x, value) in row.iter().enumerate() {
+            if let Some(value) = value {
+                let normalized = (*value - 0.0) / (0.9 - 0.0);
+                let color = RGBColor(
+                    (255.0 * normalized) as u8,  
+                    (255.0 * (1.0 - normalized)) as u8,  
+                    (255.0 * (1.0 - normalized)) as u8   
+                );
+    
+                chart.draw_series(std::iter::once(Rectangle::new(
+                    [(x, y), (x + 1, y + 1)],
+                    color.filled(),
+                )))?;
+            } else {
+                // Handle missing values with light gray
+                chart.draw_series(std::iter::once(Rectangle::new(
+                    [(x, y), (x + 1, y + 1)],
+                    RGBColor(200, 200, 200).filled(), // Light gray for missing data
+                )))?;
+            }
+        }
+    }    
+
     Ok(())
 }

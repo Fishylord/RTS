@@ -1,8 +1,8 @@
-C:\Users\User\Documents\Coding\RTS\Cy\target\debug\deps\simulation.exe: src\simulation.rs src\mq.rs src\lanes.rs src\model.rs
+C:\Users\62811\Documents\GitHub\RTS\CY\target\debug\deps\simulation.exe: src/simulation.rs src\mq.rs src\lanes.rs src\model.rs
 
-C:\Users\User\Documents\Coding\RTS\Cy\target\debug\deps\simulation.d: src\simulation.rs src\mq.rs src\lanes.rs src\model.rs
+C:\Users\62811\Documents\GitHub\RTS\CY\target\debug\deps\simulation.d: src/simulation.rs src\mq.rs src\lanes.rs src\model.rs
 
-src\simulation.rs:
+src/simulation.rs:
 src\mq.rs:
 src\lanes.rs:
 src\model.rs:
