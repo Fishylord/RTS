@@ -187,6 +187,7 @@ struct CarRouteData {
     speed: f64,
     spawn_category: String,
     route: Vec<u32>,
+    // Extra fields (like lanes) in the log are ignored.
 }
 
 #[derive(Deserialize, Debug)]
@@ -194,7 +195,10 @@ struct CarMetrics {
     id: u32,
     wait_time: f64,
     drive_time: f64,
-    total_time: f64,
+    simulated_total_time: f64,
+    wall_time: f64,
+    lane_queue_overhead: f64,
+    cpu_processing_time: f64,
 }
 
 #[derive(Deserialize, Debug)]
@@ -244,7 +248,7 @@ async fn show_car_logs() -> Result<(), Box<dyn Error>> {
                 log.car_route.route,
                 log.metrics.wait_time,
                 log.metrics.drive_time,
-                log.metrics.total_time,
+                log.metrics.simulated_total_time,
             );
         }
         println!("============================================================");
@@ -521,21 +525,13 @@ async fn show_traffic_light_metrics() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-#[derive(Deserialize, Debug)]
-struct LaneWaitingTime {
-    lane_id: u32,
-    average_waiting_time: f64,
-    timestamp: u64,
-}
-
-
 async fn show_wait_time_heatmap() -> Result<(), Box<dyn Error>> {
     // Sample data (replace with your actual data)
-let data: Vec<Vec<Option<f64>>> = vec![
-    vec![Some(0.1), Some(0.2), Some(0.3)],
-    vec![Some(0.4), None, Some(0.6)],  // <- Missing value at (1,1)
-    vec![Some(0.7), Some(0.8), Some(0.9)],
-];
+    let data: Vec<Vec<Option<f64>>> = vec![
+        vec![Some(0.1), Some(0.2), Some(0.3)],
+        vec![Some(0.4), None, Some(0.6)],  // <- Missing value at (1,1)
+        vec![Some(0.7), Some(0.8), Some(0.9)],
+    ];
 
     let rows = data.len();
     let cols = data[0].len();
