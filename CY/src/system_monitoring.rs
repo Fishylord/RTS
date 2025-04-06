@@ -9,6 +9,7 @@ use serde_json::Value;
 use std::process::Stdio;
 use plotters::prelude::*;
 use plotters::style::HSLColor;
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct JunctionTimingLog {
@@ -525,27 +526,63 @@ async fn show_traffic_light_metrics() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct LaneWaitingTime {
+    lane_id: u32,
+    average_waiting_time: f64,
+    timestamp: u64,
+}
+
 async fn show_wait_time_heatmap() -> Result<(), Box<dyn Error>> {
-    // Sample data (replace with your actual data)
-    let data: Vec<Vec<Option<f64>>> = vec![
-        vec![Some(0.1), Some(0.2), Some(0.3)],
-        vec![Some(0.4), None, Some(0.6)],  // <- Missing value at (1,1)
-        vec![Some(0.7), Some(0.8), Some(0.9)],
-    ];
+    let lane_coordinates: HashMap<u32, (usize, usize)> = HashMap::from([
+        (1000, (1, 12)), (1001, (4, 12)), (1002, (7, 12)), (1003, (12, 10)),
+        (1004, (0, 8)), (1005, (12, 4)), (1006, (0, 2)), (1007, (2, 0)),
+        (1008, (8, 0)), (1009, (11, 0)), (1010, (0, 10)), (1011, (5, 12)),
+        (1012, (11, 12)), (1013, (0, 7)), (1014, (12, 5)), (1015, (7, 0)),
+        (1016, (12, 2)), (1017, (10, 0)), (1018, (3, 10)), (1019, (6, 10)),
+        (1020, (9, 10)), (1021, (11, 9)), (1022, (1, 9)), (1023, (3, 7)),
+        (1024, (2, 6)), (1025, (3, 8)), (1026, (5, 9)), (1027, (4, 9)),
+        (1028, (6, 7)), (1029, (6, 8)), (1030, (7, 9)), (1031, (9, 7)),
+        (1032, (9, 8)), (1033, (11, 6)), (1034, (3, 4)), (1035, (2, 3)),
+        (1036, (3, 5)), (1037, (6, 4)), (1038, (5, 3)), (1039, (6, 5)),
+        (1040, (7, 6)), (1041, (8, 3)), (1042, (10, 6)), (1043, (11, 3)),
+        (1044, (3, 2)), (1045, (4, 3)), (1046, (6, 1)), (1047, (6, 2)),
+        (1048, (7, 3)), (1049, (9, 1)), (1050, (10, 3)), (1051, (9, 2)),
+    ]);
 
-    let rows = data.len();
-    let cols = data[0].len();
+    let mut heatmap_data: Vec<Vec<Option<f64>>> = vec![vec![None; 13]; 13];
 
-    // Create a heatmap image
-    let root = BitMapBackend::new("heatmap.png", (400, 400)).into_drawing_area();
+    let log_file_path = "message_log.json";  // Replace with your file path
+    let content = tokio::fs::read_to_string(log_file_path).await?;
+
+    for line in content.lines() {
+        let trimmed = line.trim();
+        if trimmed.is_empty() { continue; }
+
+        if let Ok(lane_data) = serde_json::from_str::<LaneWaitingTime>(trimmed) {
+
+            if let Some(&(x, y)) = lane_coordinates.get(&lane_data.lane_id) {
+                heatmap_data[y][x] = Some(lane_data.average_waiting_time);
+            } else {
+                println!("Lane ID {} not found in coordinate map.", lane_data.lane_id);
+            }
+        } else {
+            println!("Failed to parse line: {}", line);
+
+        }
+    }
+
+    let rows = heatmap_data.len();
+    let cols = heatmap_data[0].len();
+
+    let root = BitMapBackend::new("heatmap.png", (cols as u32 * 50, rows as u32 * 50)).into_drawing_area(); // Adjust size
     root.fill(&WHITE)?;
 
-    // Set up the chart with correct ranges
     let x_range = 0..cols;
     let y_range = 0..rows;
 
     let mut chart = ChartBuilder::on(&root)
-        .caption("Heatmap", ("Arial", 20))
+        .caption("Wait Time Heatmap", ("Arial", 20))
         .margin(10)
         .set_label_area_size(LabelAreaPosition::Left, 40)
         .set_label_area_size(LabelAreaPosition::Bottom, 40)
@@ -558,29 +595,30 @@ async fn show_wait_time_heatmap() -> Result<(), Box<dyn Error>> {
         .disable_mesh()
         .draw()?;
 
-    for (y, row) in data.iter().enumerate() {
+
+    let max_wait_time = heatmap_data.iter().flatten().filter_map(|x| *x).fold(0.0f64, f64::max); // Calculate the maximum value for normalization
+
+
+
+    for (y, row) in heatmap_data.iter().enumerate() {
         for (x, value) in row.iter().enumerate() {
             if let Some(value) = value {
-                let normalized = (*value - 0.0) / (0.9 - 0.0);
-                let color = RGBColor(
-                    (255.0 * normalized) as u8,  
-                    (255.0 * (1.0 - normalized)) as u8,  
-                    (255.0 * (1.0 - normalized)) as u8   
-                );
-    
+                let normalized = *value / max_wait_time; // Normalize to 0..1 range using actual max value
+                let color = HSLColor(240.0 / 360.0 - 240.0 / 360.0 * normalized, 1.0, 0.5); // Use HSL to create nicer gradient
                 chart.draw_series(std::iter::once(Rectangle::new(
                     [(x, y), (x + 1, y + 1)],
                     color.filled(),
                 )))?;
             } else {
-                // Handle missing values with light gray
                 chart.draw_series(std::iter::once(Rectangle::new(
                     [(x, y), (x + 1, y + 1)],
                     RGBColor(200, 200, 200).filled(), // Light gray for missing data
                 )))?;
             }
         }
-    }    
+    }
+
+    root.present()?;
 
     Ok(())
 }
