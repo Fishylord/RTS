@@ -1,6 +1,6 @@
 Average Metrics:
-Simulated Times: Wait=156.20s, Drive=101.38s, Total=257.58s
-Wall-Clock Time: 0.46s
+Simulated Times: Wait=26.31s, Drive=101.38s, Total=127.69s
+Wall-Clock Time: 0.60s
 Lane Queue Overhead: 0.12s
-CPU Processing Time: 0.44s
-Periodic Average CPU Usage: 43.55%, Periodic Average Memory Usage: 42830409 KB
+CPU Processing Time: 0.37s
+Periodic Average CPU Usage: 28.04%, Periodic Average Memory Usage: 38113521 KB

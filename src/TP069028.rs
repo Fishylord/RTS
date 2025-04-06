@@ -60,40 +60,24 @@ fn current_time_secs() -> u64 {
 
 /// --- JSON Logging Structures ---
 #[derive(Serialize, Deserialize, Debug)]
-#[serde(tag = "type", content = "data")]
-enum LogEntry {
-    LaneLog(FlowAnalyzerLog),
-    GenericLog(LogEvent),
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-struct FlowAnalyzerLog {
-    lane_id: u32,
-    recent_history: Vec<TrafficUpdate>,
-    waiting_times: Vec<f64>,
-    recommendation: Option<Recommendation>,
-    timestamp: u64,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
 struct MessageLogEntry {
     lane_id: u32,
     average_waiting_time: f64,
     timestamp: u64,
 }
 
-async fn write_json_log(entry: LogEntry) {
-    let file_path = "flow_analyzer_log.json";
+async fn write_recommendation_log(entry: Recommendation) {
+    let file_path = "flow_analyzer_recommendations_log.json";
     let mut file = OpenOptions::new()
         .create(true)
         .append(true)
         .open(file_path)
         .await
         .expect("Unable to open log file");
-    let json_line = serde_json::to_string(&entry).expect("Failed to serialize log entry");
+    let json_line = serde_json::to_string(&entry).expect("Failed to serialize recommendations log entry");
     file.write_all((json_line + "\n").as_bytes())
         .await
-        .expect("Failed to write log entry to file");
+        .expect("Failed to write recommendations log entry to file");
 }
 
 async fn write_message_log(entry: MessageLogEntry) {
@@ -342,6 +326,10 @@ pub async fn run_flow_analyzer() -> Result<(), Box<dyn std::error::Error>> {
                             if let Some(state) = states.get_mut(&intersection_id) {
                                 if let Some(rec) = state.process_update(update.clone(), acceleration) {
                                     println!("Recommendation: Lane {} requires priority adjustment, Priority Level: {}", rec.lane_id, rec.change_level);
+                                    let rec_for_log = rec.clone();
+                                    // Spawn a task to write the recommendation log concurrently
+                                    tokio::spawn(write_recommendation_log(rec_for_log));
+
                                     publish_message(&channel, "recommendations", "", &rec).await;
                                     let log = LogEvent {
                                         source: "FlowAnalyzer".into(),

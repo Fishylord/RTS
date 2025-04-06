@@ -53,7 +53,8 @@ async fn start_simulation() -> Result<(), Box<dyn Error>> {
     // Reset log and configuration files.
     let files_to_wipe = [
         "message_log.json", 
-        "sim_config.json", 
+        "sim_config.json",
+        "flow_analyzer_recommendations_log.json", 
         "light_timings_log.json", 
         "car_simulation_logs.json",
         "progress.txt",
