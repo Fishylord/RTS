@@ -164,7 +164,7 @@ async fn show_logs_menu() -> Result<(), Box<dyn Error>> {
         println!("\n--- Show Logs Menu ---");
         println!("1. Car logs.");
         println!("2. Light Timings logs.");
-        println!("3. Wait Time Heatmap (Not yet implemented).");
+        println!("3. Wait Time Heatmap.");
         println!("4. Back.");
 
         let mut choice = String::new();
