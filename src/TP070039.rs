@@ -553,7 +553,7 @@ async fn show_wait_time_heatmap() -> Result<(), Box<dyn Error>> {
 
     let mut heatmap_data: Vec<Vec<Option<f64>>> = vec![vec![None; 13]; 13];
 
-    let log_file_path = "message_log.json";  // Replace with your file path
+    let log_file_path = "message_log.json";
     let content = tokio::fs::read_to_string(log_file_path).await?;
 
     for line in content.lines() {
@@ -597,15 +597,15 @@ async fn show_wait_time_heatmap() -> Result<(), Box<dyn Error>> {
         .draw()?;
 
 
-    let max_wait_time = heatmap_data.iter().flatten().filter_map(|x| *x).fold(0.0f64, f64::max); // Calculate the maximum value for normalization
+    let max_wait_time = heatmap_data.iter().flatten().filter_map(|x| *x).fold(0.0f64, f64::max);
 
 
 
     for (y, row) in heatmap_data.iter().enumerate() {
         for (x, value) in row.iter().enumerate() {
             if let Some(value) = value {
-                let normalized = *value / max_wait_time; // Normalize to 0..1 range using actual max value
-                let color = HSLColor(240.0 / 360.0 - 240.0 / 360.0 * normalized, 1.0, 0.5); // Use HSL to create nicer gradient
+                let normalized = *value / max_wait_time;
+                let color = HSLColor(240.0 / 360.0 - 240.0 / 360.0 * normalized, 1.0, 0.5);
                 chart.draw_series(std::iter::once(Rectangle::new(
                     [(x, y), (x + 1, y + 1)],
                     color.filled(),
@@ -613,7 +613,7 @@ async fn show_wait_time_heatmap() -> Result<(), Box<dyn Error>> {
             } else {
                 chart.draw_series(std::iter::once(Rectangle::new(
                     [(x, y), (x + 1, y + 1)],
-                    RGBColor(200, 200, 200).filled(), // Light gray for missing data
+                    RGBColor(200, 200, 200).filled(),
                 )))?;
             }
         }
