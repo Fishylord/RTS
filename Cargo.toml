@@ -1,6 +1,36 @@
 [package]
-name = "RTS"
+name = "RabbitMQ"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "simulation"
+path = "src/TP063957.rs"
+
+[[bin]]
+name = "flow_analyzer"
+path = "src/TP069028.rs"
+
+[[bin]]
+name = "traffic_light"
+path = "src/TP066061.rs"
+
+[[bin]]
+name = "system_monitoring"
+path = "src/070039.rs"
+
 [dependencies]
+tokio = { version = "1.43.0", features = ["full"] }
+lapin = "2.5.0"
+tokio-amqp = "2.0.0"
+serde = { version = "1.0.218", features = ["derive"] }
+serde_json = "1.0.139"
+futures-util = "0.3.31"
+rand = "0.9.0"
+rand_chacha = "0.9.0"
+dashmap = "6.1.0"
+plotters = "0.3.7"
+sysinfo = "0.26.0"
+
+[dev-dependencies]
+criterion ='0.5.1'
