@@ -17,7 +17,7 @@ path = "src/TP066061.rs"
 
 [[bin]]
 name = "system_monitoring"
-path = "src/070039.rs"
+path = "src/TP070039.rs"
 
 [dependencies]
 tokio = { version = "1.43.0", features = ["full"] }
